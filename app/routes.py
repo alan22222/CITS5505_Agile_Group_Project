@@ -76,4 +76,4 @@ def dashboard(user_id):
         flash("Unauthorized access.")
         return redirect(url_for('main.dashboard', user_id=current_user.id))
 
-    return render_template('dashboard.html', username=current_user.username, user_id=user_id)
+    return render_template('dashboard.html', username=current_user.username, user_id=user_id
