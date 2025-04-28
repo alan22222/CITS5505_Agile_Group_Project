@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-600">
+                Data Analysis
+            </div>
+            <div class="space-x-6">
+                <a href="landing.html" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                <a href="upload.html" class="text-gray-700 hover:text-blue-600 font-medium">Upload</a>
+                <a href="selectModel.html" class="text-gray-700 hover:text-blue-600 font-medium">Model</a>
+                <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 font-medium">Result</a>
+                <a href="login.html" class="text-blue-600 border border-blue-600 px-3 py-1 rounded hover:bg-blue-600 hover:text-white">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Introductory Section -->
+    <section class="max-w-4xl mx-auto mt-16 px-6 text-center">
+        <img src="{{ url_for('static', filename='background.jpg') }}" />
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">Welcome to Data Analysis System</h1>
+        <p class="text-lg text-gray-600 mb-8">
+            Upload your datasets, run insightful analysis, and share results with colleagues in just a few clicks.
+        </p>
+        <a href="login.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700">
+            Get Started
+        </a>
+    </section>
+</body>
+</html>
