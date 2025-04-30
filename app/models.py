@@ -20,3 +20,13 @@ class UploadedData(db.Model):
     upload_date = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+class ModelRun(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    model_type = db.Column(db.String(50))
+    precision_mode = db.Column(db.String(20))
+    target_index = db.Column(db.Integer)
+    has_header = db.Column(db.Boolean)
+    result_json = db.Column(db.Text)
+    graph_path = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
