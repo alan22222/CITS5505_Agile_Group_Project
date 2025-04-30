@@ -3,7 +3,7 @@ import csv
 
 def FileValidation(file_path):
     """
-    Validate if a file is a legitimate CSV file by checking both extension and content.
+    Validate if a file is a legitimate CSV file.
     
     Args:
         file_path (str): Path to the file to be validated
@@ -19,34 +19,25 @@ def FileValidation(file_path):
     if not os.path.exists(file_path):
         return False
     
+    # Check if file is empty
+    if os.path.getsize(file_path) == 0:
+        return False
+    
+    # Try to read the file as CSV
     try:
-        # Try to read the file as CSV
-        with open(file_path, 'r') as f:
-            # Try to parse the first few lines
-            reader = csv.reader(f)
+        with open(file_path, 'r', newline='') as csvfile:
+            # Try to read first few lines to validate CSV format
+            reader = csv.reader(csvfile)
             header = next(reader)  # Read header
-            if not header:  # Empty file
+            if not header:  # Empty header
                 return False
                 
-            # Try to read a few more lines to check content
-            for _ in range(5):  # Check up to 5 rows
-                try:
-                    next(reader)
-                except StopIteration:
+            # Try reading a few more rows
+            for i, row in enumerate(reader):
+                if i >= 10:  # Read up to 10 rows
                     break
-                except csv.Error:
-                    return False
-                    
-        return True
-    except (csv.Error, UnicodeDecodeError):
+    except Exception as e:
+        # Any error reading the file means it's not a valid CSV
         return False
-    except Exception:
-        return False
-
-if __name__ == "__main__":
-    # Example usage
-    file_path = "example.csv"  # Replace with your file path
-    if FileValidation(file_path):
-        print(f"{file_path} is a valid CSV file.")
-    else:
-        print(f"{file_path} is not a valid CSV file.")
+    
+    return True

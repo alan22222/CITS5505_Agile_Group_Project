@@ -4,7 +4,7 @@ from contextlib import contextmanager
 @contextmanager
 def get_db_connection():
     """Context manager for SQLite database connection"""
-    conn = sqlite3.connect('user_database.db')
+    conn = sqlite3.connect('CITS5505.db')
     try:
         yield conn
     finally:
