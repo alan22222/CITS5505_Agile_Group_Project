@@ -1,14 +1,29 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+db = SQLAlchemy()
+migrate = Migrate()
+login_manager = LoginManager()
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+def create_app():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'devkey'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
-import app.routes
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    login_manager.login_view = 'main.login'
 
-# from flask import Flask
+    from app.models import User  # after app setup to avoid circular import
 
-# app = Flask(__name__)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
-# import app.routes  # Ensure routes are imported after app is created
+    from .routes import main
+    app.register_blueprint(main)
+
+    return app
