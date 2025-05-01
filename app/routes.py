@@ -1,38 +1,8 @@
-from flask import render_template, redirect, url_for, request
-from . import app
-
-@app.route('/')
-def home():
-    return redirect(url_for('login'))
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # For now, just redirect to upload page without checking credentials
-        return redirect(url_for('upload'))
-    return render_template('login.html')
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    if request.method == 'POST':
-        # Handle the form submission here
-        file = request.files.get('file')
-        text = request.form.get('text')
-        print(f"Received file: {file.filename if file else 'None'}")
-        print(f"Received text: {text}")
-        # For now, just reload the page
-        return redirect(url_for('upload'))
-    
-    return render_template('upload.html', 
-                         title='Upload File and Content Display', 
-                         heading='Upload File and Content Display')
-=======
+from app import db
+from app.models import User
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from app import db
-from app.models import User
 
 main = Blueprint('main', __name__)
 
@@ -105,4 +75,19 @@ def dashboard(user_id):
         flash("Unauthorized access.")
         return redirect(url_for('main.dashboard', user_id=current_user.id))
 
-    return render_template('dashboard.html', username=current_user.username, user_id
+    return render_template('dashboard.html', username=current_user.username, user_id=current_user.id)
+
+@main.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        # Handle the form submission here
+        file = request.files.get('file')
+        text = request.form.get('text')
+        print(f"Received file: {file.filename if file else 'None'}")
+        print(f"Received text: {text}")
+        # For now, just reload the page
+        return redirect(url_for('main.upload'))
+    
+    return render_template('upload.html', 
+                         title='Upload File and Content Display', 
+                         heading='Upload File and Content Display')
