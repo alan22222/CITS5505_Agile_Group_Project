@@ -18,7 +18,13 @@ def result_retrieving(user_name:str):
         
         if user_id:
             user_id = user_id[0]
-            
+            # Get all result id for this user
+            cursor.execute("""
+                SELECT id FROM model_run 
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+            """, (user_id,))
+            id_list = cursor.fetchall()
             # Get all result files for this user
             cursor.execute("""
                 SELECT result_json FROM model_run 
@@ -45,4 +51,4 @@ def result_retrieving(user_name:str):
         print(f"Error in result_retrieving: {str(e)}")
         flag = False
         
-    return flag, user_results
+    return flag, user_results, id_list
