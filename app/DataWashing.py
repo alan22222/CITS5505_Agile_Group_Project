@@ -4,74 +4,40 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 
 def DataWashing(df):
-    """
-    Clean and preprocess a pandas DataFrame.
+    clean_data_set = df.copy()
     
-    Args:
-        df (pd.DataFrame): Input DataFrame to be cleaned
-        
-    Returns:
-        pd.DataFrame: Cleaned DataFrame
-    """
-    clean_df = df.copy()
-    
-    for col in clean_df.columns:
-        # Check for too much missing values (>50%)
-        missing_ratio = clean_df[col].isna().mean()
+    for column in clean_data_set.columns:
+        # Check for too much missing values (over 50%)
+        missing_ratio = clean_data_set[column].isna().mean()
         if missing_ratio > 0.5:
-            clean_df.drop(col, axis=1, inplace=True)
+            clean_data_set.drop(column, axis=1, inplace=True)
             continue
             
         # Check column type
-        col_type = clean_df[col].dtype
+        numeric_count = clean_data_set[column].apply(lambda x: isinstance(x, (int, float)) and not pd.isna(x)).sum()
+        string_count = clean_data_set[column].apply(lambda x: isinstance(x, str) and x.strip() != '').sum()
+        total = len(clean_data_set[column])
         
         # Numeric feature handling
-        if pd.api.types.is_numeric_dtype(col_type):
-            # Check if >50% are numeric
-            numeric_ratio = clean_df[col].apply(lambda x: isinstance(x, (int, float))).mean()
-            if numeric_ratio > 0.5:
-                # Drop non-numeric rows
-                clean_df = clean_df[pd.to_numeric(clean_df[col], errors='coerce').notna()]
-                # Impute missing values
-                imputer = SimpleImputer(strategy='mean')
-                clean_df[col] = imputer.fit_transform(clean_df[[col]])
-        
+        if numeric_count / total > 0.5:
+            # Convert to numeric, coerce errors to NaN
+            clean_data_set[column] = pd.to_numeric(clean_data_set[column], errors='coerce')
+            # Drop rows with non-numeric values
+            clean_data_set = clean_data_set[clean_data_set[column].notna()]
+            # Fill missing values
+            imputer = SimpleImputer(strategy='mean')
+            clean_data_set[column] = imputer.fit_transform(clean_data_set[[column]])
+            
         # String feature handling
-        elif pd.api.types.is_string_dtype(col_type):
-            # Check if >50% are strings
-            string_ratio = clean_df[col].apply(lambda x: isinstance(x, str)).mean()
-            if string_ratio > 0.5:
-                # Drop non-string rows
-                clean_df = clean_df[clean_df[col].apply(lambda x: isinstance(x, str))]
-                # Encode strings to integers
-                le = LabelEncoder()
-                clean_df[col] = le.fit_transform(clean_df[col])
-
-                # Check string frequency and drop column if any string appears less than 3 times
-                string_counts = clean_df[col].value_counts()
-                if any(string_counts < 3):
-                    clean_df.drop(col, axis=1, inplace=True)
-                    continue
-        
-        # Date feature handling
-        elif pd.api.types.is_datetime64_any_dtype(col_type):
-            # Drop date columns if >50% are dates
-            date_ratio = clean_df[col].apply(lambda x: pd.api.types.is_datetime64_any_dtype(x)).mean()
-            if date_ratio > 0.5:
-                clean_df.drop(col, axis=1, inplace=True)
-        
-        # Abnormal string handling (non-alphanumeric)
-        else:
-            # Check for abnormal strings
-            abnormal_ratio = clean_df[col].apply(
-                lambda x: isinstance(x, str) and not x.isalnum()
-            ).mean()
-            if abnormal_ratio > 0.5:
-                clean_df.drop(col, axis=1, inplace=True)
-    
-    # Print column indices with non-numeric content
-    for col in clean_df.columns:
-        if any(~clean_df[col].apply(lambda x: str(x).isdigit())):
-            print(f"Column with non-numeric content: {col}")
-    
-    return clean_df
+        elif string_count / total > 0.5:
+            # Drop rows with non-string values
+            clean_data_set = clean_data_set[clean_data_set[column].apply(lambda x: isinstance(x, str) and x.strip() != '')]
+            # Encode string values
+            le = LabelEncoder()
+            clean_data_set[column] = le.fit_transform(clean_data_set[column])
+            
+        # Date feature handling (drop column)
+        elif clean_data_set[column].apply(lambda x: isinstance(x, pd.Timestamp)).sum() / total > 0.5:
+            clean_data_set.drop(column, axis=1, inplace=True)
+            
+    return clean_data_set

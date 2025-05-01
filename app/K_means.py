@@ -1,86 +1,153 @@
+import os
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error, silhouette_score
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import silhouette_score, calinski_harabasz_score
-from sklearn.impute import SimpleImputer
+import matplotlib.pyplot as plt
+from datetime import datetime
+import json
 
-def K_means(clean_content, type):
-    """
-    Perform K-means clustering with different configurations.
-    
-    Args:
-        file_csv (str): Path to CSV file
-        type (str): Training type ('Fast', 'Balance', 'High Precision')
-        
-    Returns:
-        tuple: (result_dict, flag) where result_dict contains metrics and flag indicates success
-    """
+def kmeans_function(clean_content, type):
     result = {
         'model_name': 'KMeans',
-        'Silhouette_score': None,
-        'Calinski_Harabasz_score': None
+        'MSE': None,
+        'precision': None
     }
     flag = False
     
     try:
-        # Read data
-        df = clean_content
-        X = df.values
+        if isinstance(clean_content, pd.DataFrame):
+            data = clean_content
+        else:
+            raise TypeError("The input data should be a pandas.DataFrame variable")
+            
+        # Standardize the data
+        scaler = StandardScaler()
+        X = scaler.fit_transform(data)
         
-        # Split data (though clustering typically uses all data)
+        # Split data into training and validation sets (80/20)
         X_train, X_val = train_test_split(X, test_size=0.2, random_state=42)
         
-        # Create pipeline
-        pipeline = Pipeline([
-            ('imputer', SimpleImputer(strategy='mean')),
-            ('scaler', StandardScaler()),
-            ('kmeans', KMeans(random_state=42))
-        ])
-        
-        if type == 'Fast':
+        # Define parameter grids based on type
+        if type == "Fast":
             param_grid = {
-                'kmeans__n_clusters': [3, 5, 7, 9, 11]
+                'n_clusters': [3, 5, 7, 9, 11]
             }
-        elif type == 'Balance':
+            grid_search = False
+        elif type == "Balance":
             param_grid = {
-                'kmeans__n_clusters': np.linspace(1, 20, num=20).tolist(),
-                'kmeans__init': ['k-means++', 'random'],
-                'kmeans__n_init': np.linspace(5, 30, num=25).tolist(),
-                'kmeans__max_iter': [100, 300, 500],
-                'kmeans__tol': [1e-4, 1e-5]
+                'n_clusters': np.linspace(1, 20, num=20, dtype=np.int32).tolist(),
+                'init': ['k-means++', 'random'],
+                'n_init': np.linspace(5, 30, num=25, dtype=np.int32).tolist(),
+                'max_iter': [100, 300, 500],
+                'tol': [1e-4, 1e-5]
             }
-        else:  # High Precision
+            grid_search = True
+        elif type == "High Precision":
             param_grid = {
-                'kmeans__n_clusters': np.linspace(1, 50, num=50).tolist(),
-                'kmeans__init': ['k-means++', 'random'],
-                'kmeans__n_init': np.linspace(5, 50, num=45).tolist(),
-                'kmeans__max_iter': np.linspace(100, 1000, num=9).tolist(),
-                'kmeans__tol': [1e-4, 1e-5, 1e-6]
+                'n_clusters': np.linspace(1, 50, num=25, dtype=np.int32).tolist(),
+                'init': ['k-means++', 'random'],
+                'n_init': np.linspace(5, 50, num=45, dtype=np.int32).tolist(),
+                'max_iter': np.linspace(100, 1000, num=9, dtype=np.int32).tolist(),
+                'tol': [1e-5, 1e-6]
             }
+            grid_search = True
+        else:
+            return result, flag
+            
+        # Create and train model
+        if grid_search:
+            kmeans = KMeans()
+            model = GridSearchCV(kmeans, param_grid, cv=5, n_jobs=-1)
+        else:
+            # For Fast mode, we'll just try all n_clusters values and pick the best
+            best_score = -1
+            best_model = None
+            for n_clusters in param_grid['n_clusters']:
+                model = KMeans(n_clusters=n_clusters, n_init=10)
+                model.fit(X_train)
+                score = silhouette_score(X_train, model.labels_)
+                if score > best_score:
+                    best_score = score
+                    best_model = model
+            model = best_model
+            
+        if grid_search:
+            model.fit(X_train)
+            best_model = model.best_estimator_
+        else:
+            best_model = model
+            
+        # Predict on validation set
+        val_labels = best_model.predict(X_val)
         
-        grid_search = GridSearchCV(
-            estimator=pipeline,
-            param_grid=param_grid,
-            cv=5,
-            scoring='silhouette',
-            n_jobs=-1,
-            verbose=2
-        )
-        grid_search.fit(X_train)
-        pipeline = grid_search.best_estimator_
+        # Calculate metrics
+        inertia = best_model.inertia_
+        silhouette = silhouette_score(X_val, val_labels)
         
-        # Evaluate on validation set
-        labels = pipeline.predict(X_val)
-        result['Silhouette_score'] = silhouette_score(X_val, labels)
-        result['Calinski_Harabasz_score'] = calinski_harabasz_score(X_val, labels)
+        # Store results
+        result['MSE'] = inertia
+        result['precision'] = float(silhouette)
+        
+        # Plot radar chart
+        plot_path = plot_radar_chart(X_val, val_labels, best_model.n_clusters)
+        result['plot_path'] = plot_path
+
         flag = True
         
     except Exception as e:
-        print(f"Error in K_means: {e}")
-        result = str(e)
+        print(f"Error in kmeans_function: {str(e)}")
         flag = False
         
     return result, flag
+
+def plot_radar_chart(X, labels, n_clusters):
+    try:
+        # Create directory if it doesn't exist
+        os.makedirs("./static/plotting/", exist_ok=True)
+        
+        # Calculate cluster means
+        cluster_means = []
+        for i in range(n_clusters):
+            cluster_data = X[labels == i]
+            if len(cluster_data) > 0:
+                cluster_means.append(np.mean(cluster_data, axis=0))
+        
+        if not cluster_means:
+            return
+            
+        # Number of features
+        n_features = X.shape[1]
+        
+        # Create radar chart
+        fig = plt.figure(figsize=(8, 8))
+        ax = fig.add_subplot(111, polar=True)
+        
+        # Calculate angles for each feature
+        angles = np.linspace(0, 2 * np.pi, n_features, endpoint=False).tolist()
+        angles += angles[:1]  # Close the loop
+        
+        for i, means in enumerate(cluster_means):
+            values = means.tolist()
+            values += values[:1]  # Close the loop
+            ax.plot(angles, values, linewidth=1, linestyle='solid', label=f'Cluster {i}')
+            ax.fill(angles, values, alpha=0.1)
+        
+        # Add labels
+        ax.set_thetagrids(np.degrees(angles[:-1]), range(1, n_features+1))
+        ax.set_title('Cluster Characteristics Radar Chart')
+        ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
+        
+        # Save plot
+        timestamp = datetime.now().strftime("%H-%M-%S_%d-%m-%Y")
+        plot_path = f"./static/plotting/kmeans_radar_{timestamp}.png"
+        plt.savefig(plot_path, bbox_inches='tight')
+        plt.close()
+        return plot_path
+        
+    except Exception as e:
+        print(f"Error in plot_radar_chart: {str(e)}")
+        result = str(e)
+        return result, False
