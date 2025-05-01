@@ -5,6 +5,7 @@ from sklearn.linear_model import SGDRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 import uuid
@@ -26,7 +27,7 @@ def LinearRegressionTraining(clean_data, label_column, type):
         # Split data
         X_train, X_val, y_train, y_val = train_test_split(
             X, y, test_size=0.2, random_state=42, shuffle=True)
-        
+        matplotlib.use('Agg') # Make sure plotting method will not be blocked by MacOS
         # Create pipeline
         pipeline = Pipeline([
             ('scaler', StandardScaler()),
@@ -86,7 +87,8 @@ def LinearRegressionTraining(clean_data, label_column, type):
         y_pred = pipeline.predict(X_val)
         mse = mean_squared_error(y_val, y_pred)
         r2 = r2_score(y_val, y_pred)
-        
+        print("========================Analysation Process Done, Plotting data=========================")
+
         # Plotting
         plt.figure(figsize=(10, 6))
         plt.scatter(range(len(y_val)), y_val, color='blue', label='Actual')

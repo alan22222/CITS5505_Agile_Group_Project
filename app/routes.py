@@ -4,6 +4,11 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from app.FileValidation import FileValidation
+from app.DataWashing import DataWashing
+from app.LinearRegression import LinearRegressionTraining
+from app.SVM_classifier import SVMClassifier
+from app.K_means import kmeans_function
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -84,10 +89,35 @@ def upload():
         file = request.files.get('file')
         text = request.form.get('text')
         print(f"Received file: {file.filename if file else 'None'}")
-        print(f"Received text: {text}")
+        # print(f"Received text: {text}")
+        # Once server client receive the data, analyze it at here
+        analysation_process(file)  # Call the analysis function
         # For now, just reload the page
         return redirect(url_for('main.upload'))
     
     return render_template('upload.html', 
                          title='Upload File and Content Display', 
                          heading='Upload File and Content Display')
+
+def analysation_process(input_file):
+    print("==================Backend Analysation process beign===========================")
+    # if FileValidation(input_file) ==  False:
+    #     print("Invalid file")
+    #     return False, 400
+    clean_data_set = DataWashing(input_file)
+    # print(clean_data_set.head(10))
+    model_name = "linear" # Remove this line in final version
+    label_column = 1 # Remove this line in final version
+    speed_type = "Balance" # Remove this line in final version
+    if model_name == "linear":
+        print("LinearRegression Model Selected")
+        result, flag = LinearRegressionTraining(clean_data=clean_data_set, label_column=label_column, type=speed_type)
+        print("Process done")
+    elif model_name == "classifier":
+        result, flag = SVMClassifier(clean_data=clean_data_set, label_column=label_column,type=speed_type)
+    elif model_name == "cluster":
+        result, flag = kmeans_function(clean_content=clean_data_set, type=speed_type)
+    
+    print(result)
+    print(flag)
+    return None

@@ -1,7 +1,7 @@
 import sqlite3
 
 def UserLoginRegister(user_name, user_pwd, query_type):
-    conn = sqlite3.connect('CITS5505.db')
+    conn = sqlite3.connect('../instance/database.db')
     cursor = conn.cursor()
     
     try:

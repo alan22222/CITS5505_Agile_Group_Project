@@ -2,7 +2,7 @@ import sqlite3
 
 def SharingFunction(current_user_name, target_user_name, result_path):
     try:
-        conn = sqlite3.connect('CITS5505.db')
+        conn = sqlite3.connect('../instance/database.db')
         cursor = conn.cursor()
         
         # Get user IDs

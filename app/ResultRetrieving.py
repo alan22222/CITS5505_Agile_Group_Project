@@ -8,7 +8,7 @@ def result_retrieving(user_name):
     
     try:
         # Connect to SQLite database
-        conn = sqlite3.connect('CITS5505.db')
+        conn = sqlite3.connect('../instance/database.db')
         cursor = conn.cursor()
         
         # Get user_id from User table

@@ -3,8 +3,11 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 
-def DataWashing(df):
-    clean_data_set = df.copy()
+def DataWashing(df) -> pd.DataFrame:
+    if isinstance(df, pd.DataFrame):
+        clean_data_set = df.copy()
+    else:
+        clean_data_set = pd.read_csv(df)
     
     for column in clean_data_set.columns:
         # Check for too much missing values (over 50%)

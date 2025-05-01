@@ -19,7 +19,7 @@ def result_storing(metrics, user_name):
             json.dump(metrics, f)
         
         # Connect to SQLite database
-        conn = sqlite3.connect('CITS5505.db')
+        conn = sqlite3.connect('../instance/database.db')
         cursor = conn.cursor()
         
         # Get user_id from User table
