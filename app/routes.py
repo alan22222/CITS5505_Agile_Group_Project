@@ -3,12 +3,15 @@ from app.models import User
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask import session
 
 from app.FileValidation import FileValidation
 from app.DataWashing import DataWashing
 from app.LinearRegression import LinearRegressionTraining
 from app.SVM_classifier import SVMClassifier
 from app.K_means import kmeans_function
+from app.ResultStoring import result_storing
+from app.ResultRetrieving import result_retrieving
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -57,6 +60,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
+            session["user_name"] = username
             return redirect(url_for('main.dashboard', user_id=user.id))
         else:
             flash("Invalid credentials.")
@@ -91,8 +95,16 @@ def upload():
         print(f"Received file: {file.filename if file else 'None'}")
         # print(f"Received text: {text}")
         # Once server client receive the data, analyze it at here
-        analysation_process(file)  # Call the analysis function
-        # For now, just reload the page
+        analysation_result, flag, status_code  = analysation_process(file)  # Call the analysis function, flag will record whether function has been executed successfully
+        # session['temperoary_result'] = analysation_result # Store a value into session variable
+        # How to pop the value and delete it ? : analysation_result = session.pop('analysation_result', None)
+        # analysation_result = {'model_name': 'LinearRegression', 'MSE_value': 985094668181.5938, 'precision_value': 0.03407539992968245, 'plot_path': './static/plotting/9f64701c-0182-4a51-ad3c-6557583abc1a.png'}
+        # flag = result_storing(metrics=analysation_result, user_name=session.get("user_name"))
+        # print(flag)
+        # print(session.get("user_name", "Unknown"))
+        # flag, results_list = result_retrieving(session.get('user_name', "Unknown"))
+        # print(flag)
+        # print(results_list)
         return redirect(url_for('main.upload'))
     
     return render_template('upload.html', 
@@ -118,6 +130,11 @@ def analysation_process(input_file):
     elif model_name == "cluster":
         result, flag = kmeans_function(clean_content=clean_data_set, type=speed_type)
     
-    print(result)
-    print(flag)
-    return None
+    # print(result)
+    # print(flag)
+    if flag == False:
+        print("Error in training")
+        return result, False, 400
+    else:
+        return result, True, 200
+    # return None

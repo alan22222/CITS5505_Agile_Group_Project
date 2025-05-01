@@ -19,11 +19,13 @@ def result_storing(metrics, user_name):
             json.dump(metrics, f)
         
         # Connect to SQLite database
-        conn = sqlite3.connect('../instance/database.db')
+        # Get the absolute path to the database
+        db_path = os.path.join(os.path.dirname(__file__), '..', 'instance', 'database.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         # Get user_id from User table
-        cursor.execute("SELECT id FROM User WHERE username = ?", (user_name,))
+        cursor.execute("SELECT id FROM user WHERE username = ?", (user_name,))
         user_id = cursor.fetchone()
         
         if user_id:
@@ -31,18 +33,22 @@ def result_storing(metrics, user_name):
             
             # Insert into ModelRun table
             cursor.execute("""
-                INSERT INTO ModelRun (
+                INSERT INTO model_run (
                     user_id, 
                     model_type, 
-                    precision_mode, 
-                    result_json, 
+                    precision_mode,
+                    has_header, 
+                    result_json,
+                    graph_path, 
                     created_at
-                ) VALUES (?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (
                 user_id,
-                metrics.get('model_name', 'KMeans'),
-                'High' if 'High Precision' in metrics else 'Balance' if 'Balance' in metrics else 'Fast',
+                metrics.get('model_name', 'UnknownModel'),
+                metrics.get('speed_mode', 'UnknownSpeed'),
+                metrics.get('has_header', False),
                 json.dumps(metrics),
+                metrics.get('plot_path', "./static/plotting/default.png"),
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             ))
             

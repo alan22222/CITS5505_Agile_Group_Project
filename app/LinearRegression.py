@@ -19,7 +19,9 @@ def LinearRegressionTraining(clean_data, label_column, type):
         # Handle label column (could be index or name)
         if isinstance(label_column, str):
             y = df[label_column]
-            X = df.drop(label_column, axis=1)
+            label_column = df.columns.get_loc[label_column]
+            X = df.drop(df.columns[label_column], axis=1)
+            
         else:
             y = df.iloc[:, label_column]
             X = df.drop(df.columns[label_column], axis=1)
@@ -108,6 +110,10 @@ def LinearRegressionTraining(clean_data, label_column, type):
         result = {
             'model_name': 'LinearRegression',
             'MSE_value': mse,
+            'speed_mode': type,
+            'label_index': label_column,
+            'has_header': False,
+            
             'precision_value': r2,
             'plot_path': plot_path
         }

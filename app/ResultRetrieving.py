@@ -2,17 +2,18 @@ import sqlite3
 import json
 import os
 
-def result_retrieving(user_name):
+def result_retrieving(user_name:str):
     flag = False
     user_results = []
     
     try:
         # Connect to SQLite database
-        conn = sqlite3.connect('../instance/database.db')
+        db_path = os.path.join(os.path.dirname(__file__), '..', 'instance', 'database.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         # Get user_id from User table
-        cursor.execute("SELECT id FROM User WHERE username = ?", (user_name,))
+        cursor.execute("SELECT id FROM user WHERE username = ?", (user_name,))
         user_id = cursor.fetchone()
         
         if user_id:
@@ -20,7 +21,7 @@ def result_retrieving(user_name):
             
             # Get all result files for this user
             cursor.execute("""
-                SELECT result_json FROM ModelRun 
+                SELECT result_json FROM model_run 
                 WHERE user_id = ?
                 ORDER BY created_at DESC
             """, (user_id,))
