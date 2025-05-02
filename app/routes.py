@@ -8,6 +8,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
+
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -146,6 +147,5 @@ def delete_file(file_id):
     # Delete from database
     db.session.delete(dataset)
     db.session.commit()
-
     flash(f"File '{dataset.filename}' deleted.", "success")
     return redirect(url_for('main.dashboard'))
