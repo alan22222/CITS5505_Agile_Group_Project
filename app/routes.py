@@ -1,38 +1,12 @@
-from flask import render_template, redirect, url_for, request
-from . import app
+import os
+from datetime import datetime
 
-@app.route('/')
-def home():
-    return redirect(url_for('login'))
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # For now, just redirect to upload page without checking credentials
-        return redirect(url_for('upload'))
-    return render_template('login.html')
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    if request.method == 'POST':
-        # Handle the form submission here
-        file = request.files.get('file')
-        text = request.form.get('text')
-        print(f"Received file: {file.filename if file else 'None'}")
-        print(f"Received text: {text}")
-        # For now, just reload the page
-        return redirect(url_for('upload'))
-    
-    return render_template('upload.html', 
-                         title='Upload File and Content Display', 
-                         heading='Upload File and Content Display')
-=======
+from app import db
+from app.models import UploadedData, User
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from app import db
-from app.models import User
+from werkzeug.utils import secure_filename
 
 main = Blueprint('main', __name__)
 
@@ -98,11 +72,80 @@ def logout():
 
 
 
+@main.route('/dashboard')
 @main.route('/dashboard/<int:user_id>')
 @login_required
-def dashboard(user_id):
-    if current_user.id != user_id:
+def dashboard(user_id=None):
+    if user_id and user_id != current_user.id:
         flash("Unauthorized access.")
-        return redirect(url_for('main.dashboard', user_id=current_user.id))
+        return redirect(url_for('main.dashboard'))
+    
+    datasets = UploadedData.query.filter_by(user_id=user_id).order_by(UploadedData.upload_date.desc()).all()
+    datasets_count = len(datasets) 
+    return render_template('dashboard.html', username=current_user.username, user_id=current_user.id, datasets=datasets,datasets_count=datasets_count)
 
-    return render_template('dashboard.html', username=current_user.username, user_id
+@main.route('/upload', methods=['GET', 'POST'])
+@login_required
+def upload():
+    if request.method == 'POST':
+        # Get file and form data
+        file = request.files.get('file')
+        text = request.form.get('text')
+        upload_name = request.form.get('upload_name')
+
+        if not file:
+            flash("No file selected.", "danger")
+            return redirect(url_for('main.upload'))
+
+        # Save file securely
+        filename = secure_filename(file.filename)
+        upload_folder = os.path.join('data', 'uploads', str(current_user.id))
+        os.makedirs(upload_folder, exist_ok=True)
+        filepath = os.path.join(upload_folder, filename)
+        file.save(filepath)
+
+        # Get file stats
+        file_stats = os.stat(filepath)
+        file_size = file_stats.st_size  # in bytes
+        created_at = datetime.fromtimestamp(file_stats.st_ctime)
+
+        # Save upload info to database
+        uploaded_data = UploadedData(
+            filename=filename,
+            file_path=filepath,
+            file_size=file_size,
+            created_at=created_at,
+            user_id=current_user.id,
+            upload_date=datetime.now()
+        )
+        db.session.add(uploaded_data)
+        db.session.commit()
+        flash(f"Upload successful: {filename}", "success")
+        return redirect(url_for('main.upload'))
+
+    return render_template(
+        'upload.html',
+        title='Upload File and Content Display',
+        heading='Upload File and Content Display'
+    )
+
+@main.route('/delete/<int:file_id>', methods=['POST'])
+@login_required
+def delete_file(file_id):
+    dataset = UploadedData.query.get_or_404(file_id)
+
+    # Ensure user owns the file
+    if dataset.user_id != current_user.id:
+        flash("Unauthorized action.", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    # Delete file from filesystem if it exists
+    if os.path.exists(dataset.file_path):
+        os.remove(dataset.file_path)
+
+    # Delete from database
+    db.session.delete(dataset)
+    db.session.commit()
+
+    flash(f"File '{dataset.filename}' deleted.", "success")
+    return redirect(url_for('main.dashboard'))

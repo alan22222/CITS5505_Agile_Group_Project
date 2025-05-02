@@ -1,9 +1,8 @@
 from datetime import datetime
 
+from app import db
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-
-from app import db
 
 
 class User(db.Model, UserMixin):
@@ -15,8 +14,11 @@ class User(db.Model, UserMixin):
 class UploadedData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(120), nullable=False)
+    file_path = db.Column(db.String(200), nullable=False)
+    file_size = db.Column(db.Integer, nullable=False)  # in bytes
+    created_at = db.Column(db.DateTime, nullable=False)  # file creation time
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    graph_path = db.Column(db.String(200), nullable=True)  # path to generated image
     upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 
