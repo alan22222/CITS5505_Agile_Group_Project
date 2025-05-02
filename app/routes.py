@@ -7,8 +7,15 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from flask import session
 
-
+from app.FileValidation import FileValidation
+from app.DataWashing import DataWashing
+from app.LinearRegression import LinearRegressionTraining
+from app.SVM_classifier import SVMClassifier
+from app.K_means import kmeans_function
+from app.ResultStoring import result_storing
+from app.ResultRetrieving import result_retrieving
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -57,6 +64,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
+            session["user_name"] = username
             return redirect(url_for('main.dashboard', user_id=user.id))
         else:
             flash("Invalid credentials.")
@@ -110,6 +118,14 @@ def upload():
         file_size = file_stats.st_size  # in bytes
         created_at = datetime.fromtimestamp(file_stats.st_ctime)
 
+        # Validate whether the uploaded file is a legal csv file
+        flag = FileValidation(filepath)
+        if flag == False:
+            flash("Invalid file format. Please upload a CSV file.", "danger")
+            return redirect(url_for('main.upload'))
+        clean_data = DataWashing(filepath)
+        sample_data = clean_data.head(3) # sample data is used for GPT suggestion rather than training. So just leav it alone for now
+
         # Save upload info to database
         uploaded_data = UploadedData(
             filename=filename,
@@ -121,7 +137,11 @@ def upload():
         )
         db.session.add(uploaded_data)
         db.session.commit()
+        current_result, process_flag, status_code= data_analysation(clean_data)
+        print(current_result)
+        print(process_flag)
         flash(f"Upload successful: {filename}", "success")
+
         return redirect(url_for('main.upload'))
 
     return render_template(
@@ -149,3 +169,22 @@ def delete_file(file_id):
     db.session.commit()
     flash(f"File '{dataset.filename}' deleted.", "success")
     return redirect(url_for('main.dashboard'))
+
+def data_analysation(clean_content, label=1,model_name="linear", speed="Balance"):
+    result = "Unknow error, analysation process has been terminated."
+    flag = False
+    # Select one of the models and run analysation process
+    if model_name == "linear":
+        result, flag = LinearRegressionTraining(clean_data=clean_content, label_column=label, type=speed)
+    elif model_name == "classifier":
+        result, flag = SVMClassifier(clean_data=clean_content, label_column=label, type=speed)
+    elif model_name == "cluster":
+        result, flag = kmeans_function(clean_content=clean_content, type=speed)
+    
+    # Well, deepseek advise me to add status code for future response, but I just not sure why, since it won't affect main logic, then keep it.
+    if flag == False:
+        status_code = 400
+    else:
+        status_code = 200
+
+    return result, flag, status_code
