@@ -1,0 +1,101 @@
+antecedents,consequents,support,confidence,lift
+frozenset({'10'}),frozenset({'1'}),0.07,0.7777777777777779,0.8641975308641976
+frozenset({'100'}),frozenset({'1'}),0.3,0.8823529411764705,0.980392156862745
+frozenset({'11'}),frozenset({'1'}),0.07,0.7777777777777779,0.8641975308641976
+frozenset({'110'}),frozenset({'1'}),0.09,0.8181818181818181,0.909090909090909
+frozenset({'12'}),frozenset({'1'}),0.09,0.8181818181818181,0.909090909090909
+frozenset({'1992'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'1996'}),frozenset({'1'}),0.05,0.8333333333333334,0.9259259259259259
+frozenset({'1999'}),frozenset({'1'}),0.06,1.0,1.1111111111111112
+frozenset({'2'}),frozenset({'1'}),0.24,0.7741935483870968,0.8602150537634408
+frozenset({'2001'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'2002'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'2008'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'2011'}),frozenset({'1'}),0.06,0.857142857142857,0.9523809523809522
+frozenset({'2022'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'3'}),frozenset({'1'}),0.2,0.9090909090909092,1.0101010101010102
+frozenset({'4'}),frozenset({'1'}),0.21,0.84,0.9333333333333332
+frozenset({'5'}),frozenset({'1'}),0.24,0.923076923076923,1.0256410256410255
+frozenset({'50'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'519431'}),frozenset({'1'}),0.72,0.8888888888888888,0.9876543209876543
+frozenset({'1'}),frozenset({'519431'}),0.72,0.7999999999999999,0.9876543209876542
+frozenset({'6'}),frozenset({'1'}),0.12,0.8,0.888888888888889
+frozenset({'60'}),frozenset({'1'}),0.21,0.875,0.9722222222222222
+frozenset({'7'}),frozenset({'1'}),0.14,0.8750000000000001,0.9722222222222223
+frozenset({'8'}),frozenset({'1'}),0.14,0.9333333333333335,1.0370370370370372
+frozenset({'80'}),frozenset({'1'}),0.14,0.9333333333333335,1.0370370370370372
+frozenset({'9'}),frozenset({'1'}),0.09,0.8999999999999999,0.9999999999999999
+frozenset({'Apr'}),frozenset({'1'}),0.07,1.0,1.1111111111111112
+frozenset({'Aug'}),frozenset({'1'}),0.08,1.0,1.1111111111111112
+frozenset({'Day'}),frozenset({'1'}),0.53,0.8983050847457628,0.9981167608286252
+frozenset({'Dec'}),frozenset({'1'}),0.09,0.8999999999999999,0.9999999999999999
+frozenset({'Feb'}),frozenset({'1'}),0.09,1.0,1.1111111111111112
+frozenset({'Friday'}),frozenset({'1'}),0.23,0.92,1.0222222222222221
+frozenset({'Jan'}),frozenset({'1'}),0.09,1.0,1.1111111111111112
+frozenset({'Jul'}),frozenset({'1'}),0.08,0.888888888888889,0.9876543209876544
+frozenset({'May'}),frozenset({'1'}),0.11,0.8461538461538461,0.9401709401709402
+frozenset({'Monday'}),frozenset({'1'}),0.19,0.8260869565217391,0.9178743961352657
+frozenset({'Multiple'}),frozenset({'1'}),0.46,0.8846153846153846,0.9829059829059829
+frozenset({'NSW'}),frozenset({'1'}),0.27,0.870967741935484,0.9677419354838711
+frozenset({'Night'}),frozenset({'1'}),0.37,0.9024390243902439,1.002710027100271
+frozenset({'No'}),frozenset({'1'}),0.9,0.9,1.0
+frozenset({'1'}),frozenset({'No'}),0.9,1.0,1.0
+frozenset({'Nov'}),frozenset({'1'}),0.07,0.7777777777777779,0.8641975308641976
+frozenset({'Oct'}),frozenset({'1'}),0.07,0.7777777777777779,0.8641975308641976
+frozenset({'Qld'}),frozenset({'1'}),0.15,0.8333333333333334,0.9259259259259259
+frozenset({'SA'}),frozenset({'1'}),0.08,1.0,1.1111111111111112
+frozenset({'Saturday'}),frozenset({'1'}),0.27,0.9000000000000001,1.0000000000000002
+frozenset({'Sep'}),frozenset({'1'}),0.08,0.888888888888889,0.9876543209876544
+frozenset({'Single'}),frozenset({'1'}),0.44,0.9166666666666667,1.0185185185185186
+frozenset({'Sunday'}),frozenset({'1'}),0.33,0.868421052631579,0.9649122807017544
+frozenset({'Thursday'}),frozenset({'1'}),0.27,0.9642857142857143,1.0714285714285714
+frozenset({'Tuesday'}),frozenset({'1'}),0.23,0.9583333333333334,1.0648148148148149
+frozenset({'Vic'}),frozenset({'1'}),0.22,0.9565217391304347,1.0628019323671496
+frozenset({'WA'}),frozenset({'1'}),0.12,0.857142857142857,0.9523809523809522
+frozenset({'Wednesday'}),frozenset({'1'}),0.18,0.8571428571428571,0.9523809523809523
+frozenset({'Weekday'}),frozenset({'1'}),0.49,0.9074074074074073,1.008230452674897
+frozenset({'Weekend'}),frozenset({'1'}),0.41,0.8913043478260869,0.9903381642512077
+frozenset({'Yes'}),frozenset({'1'}),0.15,0.7894736842105263,0.8771929824561403
+frozenset({'1'}),frozenset({'brisbane'}),0.72,0.7999999999999999,0.9876543209876542
+frozenset({'brisbane'}),frozenset({'1'}),0.72,0.8888888888888888,0.9876543209876543
+frozenset({'1'}),frozenset({'major cities of australia'}),0.8,0.888888888888889,0.9987515605493135
+frozenset({'major cities of australia'}),frozenset({'1'}),0.8,0.8988764044943821,0.9987515605493135
+frozenset({'1'}),frozenset({'national or state highway'}),0.8,0.888888888888889,0.9987515605493135
+frozenset({'national or state highway'}),frozenset({'1'}),0.8,0.8988764044943821,0.9987515605493135
+frozenset({'outer regional australia'}),frozenset({'1'}),0.05,1.0,1.1111111111111112
+frozenset({'western australia - wheat belt'}),frozenset({'1'}),0.72,0.8888888888888888,0.9876543209876543
+frozenset({'1'}),frozenset({'western australia - wheat belt'}),0.72,0.7999999999999999,0.9876543209876542
+frozenset({'10'}),frozenset({'519431'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'10'}),frozenset({'Day'}),0.07,0.7777777777777779,1.3182674199623354
+frozenset({'10'}),frozenset({'No'}),0.09,1.0,1.0
+frozenset({'Oct'}),frozenset({'10'}),0.09,1.0,11.11111111111111
+frozenset({'10'}),frozenset({'Oct'}),0.09,1.0,11.11111111111111
+frozenset({'10'}),frozenset({'brisbane'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'10'}),frozenset({'major cities of australia'}),0.08,0.888888888888889,0.9987515605493135
+frozenset({'10'}),frozenset({'national or state highway'}),0.07,0.7777777777777779,0.8739076154806493
+frozenset({'10'}),frozenset({'western australia - wheat belt'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'2011'}),frozenset({'100'}),0.05,0.7142857142857143,2.100840336134454
+frozenset({'100'}),frozenset({'519431'}),0.26,0.7647058823529411,0.9440813362381989
+frozenset({'100'}),frozenset({'No'}),0.34,1.0,1.0
+frozenset({'100'}),frozenset({'brisbane'}),0.26,0.7647058823529411,0.9440813362381989
+frozenset({'100'}),frozenset({'major cities of australia'}),0.27,0.7941176470588235,0.8922670191672174
+frozenset({'100'}),frozenset({'national or state highway'}),0.31,0.9117647058823529,1.024454725710509
+frozenset({'100'}),frozenset({'western australia - wheat belt'}),0.26,0.7647058823529411,0.9440813362381989
+frozenset({'11'}),frozenset({'519431'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'11'}),frozenset({'Day'}),0.07,0.7777777777777779,1.3182674199623354
+frozenset({'11'}),frozenset({'No'}),0.09,1.0,1.0
+frozenset({'Nov'}),frozenset({'11'}),0.09,1.0,11.11111111111111
+frozenset({'11'}),frozenset({'Nov'}),0.09,1.0,11.11111111111111
+frozenset({'11'}),frozenset({'brisbane'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'11'}),frozenset({'major cities of australia'}),0.07,0.7777777777777779,0.8739076154806493
+frozenset({'11'}),frozenset({'national or state highway'}),0.08,0.888888888888889,0.9987515605493135
+frozenset({'11'}),frozenset({'western australia - wheat belt'}),0.07,0.7777777777777779,0.9602194787379974
+frozenset({'110'}),frozenset({'519431'}),0.09,0.8181818181818181,1.01010101010101
+frozenset({'110'}),frozenset({'No'}),0.11,1.0,1.0
+frozenset({'110'}),frozenset({'brisbane'}),0.09,0.8181818181818181,1.01010101010101
+frozenset({'110'}),frozenset({'major cities of australia'}),0.1,0.9090909090909092,1.021450459652707
+frozenset({'110'}),frozenset({'national or state highway'}),0.11,1.0,1.1235955056179776
+frozenset({'110'}),frozenset({'western australia - wheat belt'}),0.09,0.8181818181818181,1.01010101010101
+frozenset({'12'}),frozenset({'519431'}),0.09,0.8181818181818181,1.01010101010101
+frozenset({'12'}),frozenset({'Dec'}),0.1,0.9090909090909092,9.090909090909092
+frozenset({'Dec'}),frozenset({'12'}),0.1,1.0,9.090909090909092
