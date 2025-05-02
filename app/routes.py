@@ -85,7 +85,7 @@ def dashboard(user_id):
     if current_user.id != user_id:
         flash("Unauthorized access.")
         return redirect(url_for('main.dashboard', user_id=current_user.id))
-
+    last_result = session.pop("temperoary_result", None)
     return render_template('dashboard.html', username=current_user.username, user_id=current_user.id)
 
 @main.route('/upload', methods=['GET', 'POST'])
@@ -97,36 +97,24 @@ def upload():
         print(f"Received file: {file.filename if file else 'None'}")
         # print(f"Received text: {text}")
         # Once server client receive the data, analyze it at here
-        # analysation_result, flag, status_code  = analysation_process(file)  # Call the analysis function, flag will record whether function has been executed successfully
-        # session['temperoary_result'] = analysation_result # Store a value into session variable
+        analysation_result, flag, status_code  = analysation_process(input_file=file)  # Call the analysis function, flag will record whether function has been executed successfully
+        session["temperoary_result"] = analysation_result # Store a value into session variable
         # How to pop the value and delete it ? : analysation_result = session.pop('analysation_result', None)
-        # analysation_result = {'model_name': 'LinearRegression', 'MSE_value': 985094668181.5938, 'precision_value': 0.03407539992968245, 'plot_path': './static/plotting/9f64701c-0182-4a51-ad3c-6557583abc1a.png'}
-        # flag = result_storing(metrics=analysation_result, user_name=session.get("user_name"))
-        # print(flag)
-        # print(session.get("user_name", "Unknown"))
-        # flag, results_list, id_list = result_retrieving(session.get('user_name', "Unknown"))
-        # print(session.get('user_name', "Unknown"))
-        # flag = SharingFunction(session.get('user_name', "Unknown"), "ALAN", 1)
-        # print(flag)
-        result, flag = get_user_results_by_username("ALAN")
-        print(flag)
-        print(result)
         return redirect(url_for('main.upload'))
     
     return render_template('upload.html', 
                          title='Upload File and Content Display', 
                          heading='Upload File and Content Display')
 
-def analysation_process(input_file):
+def analysation_process(input_file, model_name="linear", label_column=1, speed_type="Balance"):
     print("==================Backend Analysation process beign===========================")
-    # if FileValidation(input_file) ==  False:
-    #     print("Invalid file")
-    #     return False, 400
+    result = "Analysation process has been terminated"
+    flag = False
+    if FileValidation(input_file) ==  False:
+        print("Invalid file")
+        return result,False, 400
     clean_data_set = DataWashing(input_file)
     # print(clean_data_set.head(10))
-    model_name = "linear" # Remove this line in final version
-    label_column = 1 # Remove this line in final version
-    speed_type = "Balance" # Remove this line in final version
     if model_name == "linear":
         print("LinearRegression Model Selected")
         result, flag = LinearRegressionTraining(clean_data=clean_data_set, label_column=label_column, type=speed_type)
@@ -135,7 +123,8 @@ def analysation_process(input_file):
         result, flag = SVMClassifier(clean_data=clean_data_set, label_column=label_column,type=speed_type)
     elif model_name == "cluster":
         result, flag = kmeans_function(clean_content=clean_data_set, type=speed_type)
-    
+    else:
+        return result, False, 400
     # print(result)
     # print(flag)
     if flag == False:
