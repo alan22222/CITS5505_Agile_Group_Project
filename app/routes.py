@@ -13,7 +13,11 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    # login to dashboard
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard', user_id=current_user.id))
+    # logout to landing page
+    return render_template('landing.html')
 
 
 @main.route('/register', methods=['GET', 'POST'])
