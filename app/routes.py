@@ -7,7 +7,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-
+from app.forms import SelectModelForm
 
 main = Blueprint('main', __name__)
 
@@ -126,7 +126,7 @@ def upload():
         db.session.add(uploaded_data)
         db.session.commit()
         flash(f"Upload successful: {filename}", "success")
-        return redirect(url_for('main.upload'))
+        return redirect(url_for('main.select_model', data_id=uploaded_data.id))
 
     return render_template(
         'upload.html',
@@ -153,3 +153,30 @@ def delete_file(file_id):
     db.session.commit()
     flash(f"File '{dataset.filename}' deleted.", "success")
     return redirect(url_for('main.dashboard'))
+
+@main.route('/select_model', methods=['GET', 'POST'])
+@login_required
+def select_model():
+    form = SelectModelForm()
+    # get user id
+    form.user_id.data = current_user.id
+
+    if form.validate_on_submit():
+        # read the parameters
+        user_id        = form.user_id.data
+        model_type     = form.model_type.data
+        precision_mode = form.precision_mode.data
+        target_index   = form.target_index.data
+        has_header     = form.has_header.data
+
+        
+        return redirect(url_for(
+            'main.dashboard',
+            user_id=user_id,
+            model_type=model_type,
+            precision_mode=precision_mode,
+            target_index=target_index,
+            has_header=int(has_header)
+        ))
+
+    return render_template('select_model.html', form=form)
