@@ -1,0 +1,28 @@
+.card {
+    /* Primary color outline */
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: var(--light-color);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabs, mainly make it more tech-feel */
+.card-header {
+    background-color: rgba(30, 30, 47, 1);
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.card-header small {
+    font-size: 1rem;
+    color: rgba(255, 213, 128);
+    font-weight: 500;
+}
+
