@@ -1,4 +1,3 @@
-/* This CSS file contains mostly general elements, and responsive styles of all elements */
 /* Base */
 /* root defines color that are shared by most of the pages */
 :root {
@@ -10,135 +9,20 @@
     --border-radius: 0.375rem;
     --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     --transition: all 0.3s ease;
-    font-family: 'Open Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-    font-family: var(--font-family);
-    line-height: 1.6;
+    font-family: 'Open Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.8;
     color: var(--dark-color);
     background-color: var(--light-color);
     min-height: 100vh;
     padding: 1rem;
-    padding-top: 3.5rem; /* leave space for the fixed navbar */
-    margin: 0;
 }
-
-a {
-    text-decoration: none;
-    color: var(--primary-color);
-    transition: var(--transition);
-}
-
-a:hover {
-    color: rgba(0, 86, 179, 1);
-}
-
-/* for layout.html some sharing styling*/
-/* Navbar Styles */
-.navbar {
-    background-color: var(--primary-color);
-    height: 4.5rem;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    padding: 0.5rem 1rem;
-    position: fixed;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    z-index: 1000; 
-}
-/* use z-index to ensure the navbar stays above other content */
-
-.navbar .navbar-nav {
-    align-items: center;
-    font-size: 0.85rem;
-}
-
-
-.navbar .container {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.navbar .btn {
-    white-space: nowrap; /* Prevents wrapping */
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.2;
-}
-
-.navbar-brand {
-    align-items: center;
-    display: flex;
-    font-size: 1.25rem;
-    font-weight: narrower;
-    color: white;
-    margin-right: 0.75rem;
-    padding-bottom: 0;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    
-}
-
-.navbar-brand:hover {
-    color: #dceeff;
-}
-
-.nav-link {
-    align-items: center;
-    color: white;
-    margin-right: 0.8rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    transition: var(--transition);
-}
-
-.nav-link:hover {
-    color: #dceeff;
-}
-
-.navbar-collapse {
-    align-items: center;
-    background-color: var(--primary-color); /* Matches navbar background */
-    display: flex;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    margin-top: 0;
-    transition: var(--transition);
-    /* outline: 2px solid red; */
-    /* the outline color are used for debug */
-
-}
-
-.navbar-toggler {
-    border: none;
-    background-color: var(--primary-color);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--border-radius);
-    transition: var(--transition);
-}
-.navbar-toggler:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: scale(1.05);
-    box-shadow: rgba(255, 255, 255, 0.2);
-}
-.navbar-toggler:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.5);
-}
-
 
 /* Container & Layout */
 .container {
-    max-width: 950px;
+    max-width: 850px;
     margin: 2rem auto;
     padding: 0 1rem;
 }
@@ -181,6 +65,61 @@ form {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.25rem rgba(74, 111, 165, 0.25);
     outline: 0;
+}
+
+/* Hide the default file input button */
+#fileUpload {
+    display: none;
+}
+
+/* Custom the file upload button */
+.file-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    width: 100%;
+    margin-bottom: 1.25rem;
+}
+
+/* Change color on hover */
+.file-upload-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add a right arrow to the button */
+.file-upload-btn:after {
+    content: '→';
+    margin-left: 0.75rem;
+    font-size: 1.125rem;
+}
+
+/* File Input Customization */
+input[type="file"] {
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    background-color: #e9ecef;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #010101;
 }
 
 /* Base styles for the alert box */
@@ -226,6 +165,51 @@ form {
 
 
 
+/* CSV Table Preview Styles */
+.csv-preview-container {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    background-color: #f8f9fa;
+    margin-bottom: 1.25rem;
+    display: none; /* Hidden by default */
+}
+
+.csv-preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: monospace;
+    font-size: 0.875rem;
+}
+
+.csv-preview-table th, 
+.csv-preview-table td {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.csv-preview-table th {
+    background-color: #e9ecef;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.csv-preview-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.csv-preview-table tr:nth-child(odd) {
+    background-color: white;
+}
+
+.csv-preview-table tr:hover {
+    background-color: #e9ecef;
+}
+
 /* Button Styles */
 .btn {
     display: inline-flex;
@@ -241,7 +225,6 @@ form {
     font-weight: 600;
     transition: var(--transition);
     width: 100%;
-    border-radius: 20px;
 }
 
 .btn-primary {
@@ -258,46 +241,6 @@ form {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-
-.btn-light {
-    background-color: white;
-    color: var(--dark-color);
-    border: 1.5px solid rgba(30, 30, 47, 1);
-    font-weight: bold;
-    transition: var(--transition);
-}
-
-.btn-light:hover {
-    background-color: rgba(30, 30, 47, 1);
-    color: rgba(255, 213, 128);
-    border-color: rgba(30, 30, 47, 1);
-}
-
-.btn-danger {
-    background-color: var(--dark-color);
-}
-
-/* for Flash message keyframes */
-@keyframes flashMessage {
-    0% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    25% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    75% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-}
-
-
 /* Responsive Adjustments */
 
 
@@ -308,35 +251,6 @@ form {
 }
 
 @media (max-width: 768px) {
-    body {
-        padding: 0.5rem;
-        padding-top: 4.5rem;
-        font-size: 0.9rem;
-    }
-
-    .navbar {
-        padding: 0.75rem;
-        padding-top: 3rem;
-        box-shadow: none;
-        height: auto;
-    }
-
-    .navbar-brand {
-        font-size: 1rem;
-    }
-
-    .nav-link {
-        font-size: 0.9rem;
-        margin-right: 0.5rem;
-    }
-
-    .navbar-toggler {
-        padding: 0.1rem 0.2rem;
-
-        /* padding: 0.25rem 0.4rem; Keep the toggler compact */
-        /* margin: auto; */
-    }
-
     .container {
         margin: 1rem auto;
         padding: 0 0.75rem;
@@ -350,11 +264,6 @@ form {
         padding: 1.5rem;
     }
 
-    /* For Upload */
-    .form-control::placeholder {
-        font-size: 0.95rem;
-      }
-
     .file-upload-btn,
     .btn {
         padding: 0.65rem 1.25rem;
@@ -365,84 +274,11 @@ form {
         font-size: 1rem;
         margin-left: 0.5rem;
     }
-
-    .btn-submit {
-        padding: 0.75rem 1.5rem;
-        font-size: 1.25rem;
-      }
-      .btn-submit .bi {
-        font-size: 1.25rem; /* display-6 equivalent */
-      }
-
-    /* For Dashboard */
-    .main-content {
-        grid-template-columns: 1fr;
-    }
-
-    .welcome-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .date-display {
-        margin-top: 15px;
-    }
-    
-    .stats-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .quick-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .action-button {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .dashboard-section h3 {
-        font-size: 0.95rem;
-    }
-    .dashboard-section .view-all {
-        font-size: 0.95rem;
-    }
-
-    .datasets-table th, 
-    .datasets-table td {
-        font-size: 0.875rem;
-    }
-    
 }
 
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
     body {
         padding: 0.5rem;
-        padding-top: 3.5rem;
-        font-size: 0.75rem;
-    }
-
-    .navbar {
-        padding: 0.5rem;
-        box-shadow: none;
-        height: auto;
-    }
-
-    .navbar-brand {
-        font-size: 1rem;
-    }
-
-    .nav-link { 
-        font-size: 0.8rem;
-        margin-right: 0.5rem;
-    }
-
-    .navbar-toggler {
-        line-height: 1;
-        padding: 0.1rem 0.2rem;
-
-        /* padding: 0.2rem 0.4rem; */
     }
 
     .container {
@@ -463,10 +299,6 @@ form {
         margin-bottom: 1rem;
     }
 
-    /* For Upload */
-    .form-control::placeholder {
-        font-size: 0.95rem;
-        }
     .file-upload-btn,
     .btn {
         padding: 0.6rem 1rem;
@@ -476,43 +308,6 @@ form {
     .file-upload-btn:after {
         font-size: 0.9375rem;
         margin-left: 0.4rem;
-    }
-
-    /* For Dashboard */
-    .welcome-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .date-display {
-        margin-top: 1rem;
-    }
-    
-    .stats-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .quick-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .action-button {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .dashboard-section h3 {
-        font-size: 0.8rem;
-    }
-
-    .dashboard-section .view-all {
-        font-size: 0.8rem;
-    }
-
-    .datasets-table th, 
-    .datasets-table td {
-        font-size: 0.65rem;
     }
 }
 
