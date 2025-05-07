@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Your Model Analyses</h2>
+  <div class="row">
+    {% for run in results %}
+      <div class="col-md-5 mb-4">
+        <div class="card shadow-sm h-100 text-center" style="width: 18rem;">
+          {% if run.graph_path %}
+             <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" class="card-img-top" alt="Plot">
+          {% endif %}
+          <div class="card-body">
+            <h6 class="card-title">{{ run.model_type | title }}</h6>
+            <p class="text-muted" style="font-size: 0.85rem;">
+              {{ run.created_at.strftime('%Y-%m-%d') }}
+            </p>
+            <div class="d-flex justify-content-around" style="gap: 7px;">
+              <!-- View Button -->
+              <a href="{{ url_for('main.view_result', run_id=run.id) }}" class="btn btn-sm btn-primary">View</a>
+
+              <!-- Share Form Button -->
+              <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{ run.id }}">Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share Modal -->
+      <div class="modal fade" id="shareModal{{ run.id }}" tabindex="-1" aria-labelledby="shareModalLabel{{ run.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <form action="{{ url_for('main.share_result',run_id=run.id) }}" method="POST" class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="shareModalLabel{{ run.id }}">Share Result</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <label for="recipient_username" class="form-label">Recipient Username:</label>
+              <input type="text" name="recipient_username" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Share</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
