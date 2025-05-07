@@ -1,9 +1,11 @@
-/* Dashboard Styles */
-.dashboard-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 25px;
-}
+    /* Dashboard Styles */
+    .dashboard-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 25px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
 
 /* Welcome Header */
 .welcome-header {
@@ -108,20 +110,27 @@
     color: #2c3e50;
 }
 
-/* Main Content Area */
-.main-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 25px;
-    margin-bottom: 30px;
-}
+    /* Main Content Area */
+    .main-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
 
-/* Quick Actions */
-.quick-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
+    @media (max-width: 768px) {
+        .main-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+   
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
 
 .action-button {
     display: flex;
@@ -167,8 +176,31 @@
     font-weight: 500;
 }
 
-/* Responsive adjustments moved to style.css for 2 sizes */
-
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .welcome-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .date-display {
+            margin-top: 15px;
+        }
+        
+        .stats-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .quick-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .action-button {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
 /* Recent Datasets */
 .section-header {
     display: flex;
