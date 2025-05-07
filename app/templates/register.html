@@ -3,6 +3,12 @@
 {% block title %}Register - Flask App{% endblock %}
 
 {% block content %}
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login-reg.css') }}">
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -10,10 +16,11 @@
             <div class="card">
                 <div class="card-header text-center">
                     <ul class="nav nav-tabs card-header-tabs" id="authTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="true">Register</button>
-                        </li>
+                        <!-- <li class="nav-item" role="presentation"> -->
+                            <!-- <button class="nav-link active" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="true">Register</button> -->
+                        <!-- </li> -->
                     </ul>
+                    <small class="d-block mt-2"> <i class="bi bi-sign-turn-right-fill"></i> Start you data journey today!</small> 
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="authTabsContent">
@@ -31,7 +38,8 @@
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
                                 </div>
-                                <button type="submit" class="btn btn-success w-100">Register</button>
+                                <button type="submit" class="btn btn-light">Register</button> 
+                                <!-- align the button style -->
                             </form>
                         </div>
                         

@@ -7,20 +7,18 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from flask import session
 
-from app.FileValidation import FileValidation
-from app.DataWashing import DataWashing
-from app.LinearRegression import LinearRegressionTraining
-from app.SVM_classifier import SVMClassifier
-from app.K_means import kmeans_function
-from app.ResultStoring import result_storing
-from app.ResultRetrieving import result_retrieving
+from app.forms import SelectModelForm
+
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    # login to dashboard
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard', user_id=current_user.id))
+    # logout to landing page
+    return render_template('landing.html')
 
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -141,8 +139,7 @@ def upload():
         print(current_result)
         print(process_flag)
         flash(f"Upload successful: {filename}", "success")
-
-        return redirect(url_for('main.upload'))
+        return redirect(url_for('main.select_model', data_id=uploaded_data.id))
 
     return render_template(
         'upload.html',
@@ -170,21 +167,29 @@ def delete_file(file_id):
     flash(f"File '{dataset.filename}' deleted.", "success")
     return redirect(url_for('main.dashboard'))
 
-def data_analysation(clean_content, label=1,model_name="linear", speed="Balance"):
-    result = "Unknow error, analysation process has been terminated."
-    flag = False
-    # Select one of the models and run analysation process
-    if model_name == "linear":
-        result, flag = LinearRegressionTraining(clean_data=clean_content, label_column=label, type=speed)
-    elif model_name == "classifier":
-        result, flag = SVMClassifier(clean_data=clean_content, label_column=label, type=speed)
-    elif model_name == "cluster":
-        result, flag = kmeans_function(clean_content=clean_content, type=speed)
-    
-    # Well, deepseek advise me to add status code for future response, but I just not sure why, since it won't affect main logic, then keep it.
-    if flag == False:
-        status_code = 400
-    else:
-        status_code = 200
+@main.route('/select_model', methods=['GET', 'POST'])
+@login_required
+def select_model():
+    form = SelectModelForm()
+    # get user id
+    form.user_id.data = current_user.id
 
-    return result, flag, status_code
+    if form.validate_on_submit():
+        # read the parameters
+        user_id        = form.user_id.data
+        model_type     = form.model_type.data
+        precision_mode = form.precision_mode.data
+        target_index   = form.target_index.data
+        has_header     = form.has_header.data
+
+        
+        return redirect(url_for(
+            'main.dashboard',
+            user_id=user_id,
+            model_type=model_type,
+            precision_mode=precision_mode,
+            target_index=target_index,
+            has_header=int(has_header)
+        ))
+
+    return render_template('select_model.html', form=form)

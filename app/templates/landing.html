@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to MyApp</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/hero.png') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      color: #fff;
+    }
+    .hero .content {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .btn-cta {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.25rem;
+      transition: transform 0.2s;
+    }
+    .btn-cta:hover { transform: scale(1.05); }
+    /* Feature Cards as Links */
+    .feature-link {
+      display: block;
+      padding: 1.5rem;
+      border: 1px solid #dee2e6;
+      border-radius: .5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background-color: #fff;
+    }
+    .feature-link:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    /* Navbar Transparent */
+    .navbar-transparent {
+      background: transparent;
+      position: absolute;
+      top: 0; width: 100%;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-transparent">
+    <div class="container">
+      <a class="navbar-brand text-white" href="#">MyApp</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item me-2"><a class="btn btn-outline-light" href="{{ url_for('main.login') }}">Login</a></li>
+          <li class="nav-item"><a class="btn btn-light" href="{{ url_for('main.register') }}">Register</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero d-flex align-items-center justify-content-center">
+    <div class="content">
+      <h1 class="display-4 fw-bold">Discover Insights in Seconds</h1>
+      <p class="lead mb-4">Upload your data, run models, and visualize results all in one place.</p>
+      <a href="#features" class="btn btn-primary btn-cta">Get Started</a>
+    </div>
+  </header>
+
+  <!-- Features -->
+  <section id="features" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Features</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="{{ url_for('main.login') }}" class="feature-link text-center">
+            <i class="bi bi-upload display-4 mb-3 text-primary"></i>
+            <h5>Easy Upload</h5>
+            <p>Securely upload your CSV files with a single click.</p>
+            <button class="btn btn-outline-primary mt-2">Login to Upload</button>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="{{ url_for('main.login') }}" class="feature-link text-center">
+            <i class="bi bi-bar-chart-line display-4 mb-3 text-success"></i>
+            <h5>Instant Analysis</h5>
+            <p>Run statistical models and get metrics instantly.</p>
+            <button class="btn btn-outline-success mt-2">Login to Analyze</button>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="{{ url_for('main.login') }}" class="feature-link text-center">
+            <i class="bi bi-share display-4 mb-3 text-info"></i>
+            <h5>Share Results</h5>
+            <p>Export or share your results with your team.</p>
+            <button class="btn btn-outline-info mt-2">Login to Share</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p class="mb-0">© 2025 MyApp. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Smooth Scroll -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Select Model{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Select Model Parameters</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.model_type.label(class="form-label") }}
+      {{ form.model_type(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.precision_mode.label(class="form-label") }}
+      {{ form.precision_mode(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.target_index.label(class="form-label") }}
+      {{ form.target_index(class="form-control", placeholder=form.target_index.description) }}
+    </div>
+
+    <div class="form-check mb-3">
+      {{ form.has_header(class="form-check-input") }}
+      {{ form.has_header.label(class="form-check-label") }}
+    </div>
+
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endblock %}
