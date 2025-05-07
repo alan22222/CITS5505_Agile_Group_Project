@@ -3,16 +3,25 @@
 {% block title %}Login - Flask App{% endblock %}
 
 {% block content %}
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-reg.css') }}">
+
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
                         <ul class="nav nav-tabs card-header-tabs" id="authTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
-                            </li>
-                        </ul>                  
+                            <!-- <li class="nav-item" role="presentation"> -->
+                                <!-- <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button> -->
+                            <!-- </li> -->
+                        </ul>
+                        <small class="d-block mt-2"> <i class="bi bi-person-fill"></i> Welcome Back! </small>
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="authTabsContent">
@@ -26,7 +35,8 @@
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                    <!-- align the button style -->
                                 </form>
                             </div>
                         </div>
