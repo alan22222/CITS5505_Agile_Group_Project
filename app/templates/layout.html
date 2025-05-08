@@ -6,6 +6,8 @@
     <title>{% block title %}Flask App{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -13,23 +15,23 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-md "> <!-- amended expand from  "navbar-expand-lg" to mid (below 768px) ; removed "navbar-dark bg-dark" -->
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">Analysis</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">MyApp</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
+                        <a class="nav-link" href="{{ url_for('main.index') }}"> <i class="bi bi-house-heart"></i> Home</a>
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.dashboard', user_id=current_user.id) }}">Dashboard</a>
+                        <a class="nav-link" href="{{ url_for('main.dashboard', user_id=current_user.id) }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.upload', user_id=current_user.id) }}">upload</a>
+                        <a class="nav-link" href="{{ url_for('main.upload', user_id=current_user.id) }}"> <i class="bi bi-file-earmark-arrow-up"></i> Upload</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.select_model', user_id=current_user.id) }}">select model</a>
@@ -42,20 +44,20 @@
                     </li>
                     {% endif %}
                 </ul>
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto"> <!-- added ms-auto -->
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="nav-link">Welcome, {{ current_user.username }}</span>
+                        <span class="nav-link">Welcome, <i class="bi bi-person"></i> {{ current_user.username }}</span>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                    <li class="nav-item">                        
+                        <a class="btn btn-light" href="{{ url_for('main.logout') }}">Logout</a>
                     </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+                    <li class="nav-item">                        
+                        <a class="btn btn-primary" href="{{ url_for('main.login') }}">Login</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.register') }}">Register</a>
+                    <li class="nav-item"> 
+                        <a class="btn btn-light" href="{{ url_for('main.register') }}">Register</a>
                     </li>
                     {% endif %}
                 </ul>
