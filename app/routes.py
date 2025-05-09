@@ -15,6 +15,8 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
+from app.forms import SelectModelForm
+
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -67,6 +69,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
+            session["user_name"] = username
             return redirect(url_for('main.dashboard', user_id=user.id))
         else:
             flash("Invalid credentials.")
@@ -119,6 +122,15 @@ def upload():
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size  # in bytes
         upload_date = datetime.fromtimestamp(file_stats.st_ctime)
+        created_at = datetime.fromtimestamp(file_stats.st_ctime)
+
+        # Validate whether the uploaded file is a legal csv file
+        flag = FileValidation(filepath)
+        if flag == False:
+            flash("Invalid file format. Please upload a CSV file.", "danger")
+            return redirect(url_for('main.upload'))
+        clean_data = DataWashing(filepath)
+        sample_data = clean_data.head(3) # sample data is used for GPT suggestion rather than training. So just leav it alone for now
 
         # Save upload info to database
         uploaded_data = UploadedData(
@@ -130,6 +142,9 @@ def upload():
         )
         db.session.add(uploaded_data)
         db.session.commit()
+        current_result, process_flag, status_code= data_analysation(clean_data)
+        print(current_result)
+        print(process_flag)
         flash(f"Upload successful: {filename}", "success")
         return redirect(url_for('main.select_model', data_id=uploaded_data.id))
 
