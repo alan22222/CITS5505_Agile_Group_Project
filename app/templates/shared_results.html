@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Shared With Me{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Results Shared With You</h2>
+  {% for item in shared_items %}
+  <div class="card my-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">
+        {{ item.modelrun.model_type | title }}
+        <br><small class="text-muted">Shared by: {{ item.sender.username }}</small>
+      </h5>
+      <p class="card-text"><strong>Shared on:</strong> {{ item.shared_at.strftime('%Y-%m-%d %H:%M') }}</p>
+      <ul>
+        {% for key, value in item.parsed_metrics.items() %}
+          <li><strong>{{ key | replace("_", " ") | title }}:</strong> {{ value }}</li>
+        {% endfor %}
+
+      </ul>
+      <a href="{{ url_for('main.view_result', run_id=item.modelrun_id) }}" class="btn btn-sm btn-primary">View Full</a>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+{% endblock %}

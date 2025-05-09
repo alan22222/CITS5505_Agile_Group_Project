@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, SelectField, IntegerField, BooleanField, SubmitField
+from wtforms import (BooleanField, HiddenField, IntegerField, SelectField,
+                     SubmitField)
 from wtforms.validators import DataRequired, NumberRange
+
 
 class SelectModelForm(FlaskForm):
     user_id = HiddenField('User ID')
@@ -8,17 +10,17 @@ class SelectModelForm(FlaskForm):
         'Model Type',
         choices=[
             ('linear_regression', 'Linear Regression'),
-            ('random_forest',     'Random Forest'),
-            ('svm',               'SVM'),
+            ('KMeans',     'K-means'),
+            ('SVM',               'SVM'),
         ],
         validators=[DataRequired()]
     )
     precision_mode = SelectField(
         'Precision Mode',
         choices=[
-            ('low',    'Low'),
-            ('medium', 'Medium'),
-            ('high',   'High'),
+            ('Fast',    'Fast'),
+            ('Balance', 'Balance'),
+            ('High Precision',   'High Precision'),
         ],
         validators=[DataRequired()]
     )

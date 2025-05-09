@@ -1,0 +1,527 @@
+{% extends "layout.html" %}
+{% block title %}Model Details{% endblock %}
+
+{% block head %}
+<style>
+  :root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --accent-color: #4cc9f0;
+    --text-primary: #2b2d42;
+    --text-secondary: #6c757d;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+  }
+
+  /* Main container */
+  .model-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    color: var(--text-primary);
+  }
+
+  /* Card styling */
+  .model-card {
+    background-color: var(--bg-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+  }
+
+  .model-card:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  }
+
+  /* Image container */
+  .model-image-container {
+    width: 100%;
+    position: relative;
+    background-color: var(--bg-light);
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+
+  .model-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 60%; /* Aspect ratio */
+    overflow: hidden;
+  }
+
+  .model-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: var(--transition);
+  }
+
+  .image-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .image-control-btn {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+
+  .image-control-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: var(--text-secondary);
+    font-style: italic;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  }
+
+  /* Details section */
+  .model-details {
+    padding: 30px;
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+  }
+
+  .model-title {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+    display: inline-block;
+  }
+
+  .model-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .info-item {
+    padding: 15px;
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+
+  .info-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+
+  /* Metrics section */
+  .metrics-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .metrics-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    font-weight: 600;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .metric-card {
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    cursor: pointer;
+  }
+
+  .metric-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    background-color: rgba(67, 97, 238, 0.05);
+  }
+
+  .metric-name {
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal.active {
+    display: flex;
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .modal.active .modal-image {
+    transform: scale(1);
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+
+  .close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+  }
+
+  /* Responsive design */
+  @media (min-width: 768px) {
+    .model-card {
+      flex-direction: row;
+    }
+    
+    .model-image-container {
+      width: 60%;
+    }
+    
+    .model-details {
+      width: 40%;
+    }
+  }
+
+  /* Animation classes */
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="model-container fade-in">
+  <div class="model-card">
+    <div class="model-image-container" id="imageContainer">
+      {% if run.graph_path %}
+        <div class="model-image-wrapper">
+          <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" 
+               class="model-image" id="modelImage" alt="Model visualization">
+        </div>
+        <div class="image-controls">
+          <button class="image-control-btn" id="zoomIn" title="Zoom In">+</button>
+          <button class="image-control-btn" id="zoomOut" title="Zoom Out">-</button>
+          <button class="image-control-btn" id="fullscreen" title="Fullscreen">⛶</button>
+        </div>
+      {% else %}
+        <div class="no-image">
+          <p>No visualization available for this model</p>
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="model-details">
+      <h4 class="model-title">{{ run.model_type | title }} Model</h4>
+      
+      <div class="model-info">
+        <div class="info-item">
+          <div class="info-label">Filename</div>
+          <div class="info-value">{{ run.filename }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Precision Mode</div>
+          <div class="info-value">{{ run.precision_mode }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Target Index</div>
+          <div class="info-value">{{ run.target_index }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Has Header</div>
+          <div class="info-value">{{ 'Yes' if run.has_header else 'No' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Run Time</div>
+          <div class="info-value">{{ run.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+        </div>
+      </div>
+
+      {% if metrics %}
+        <div class="metrics-section">
+          <h5 class="metrics-title">Model Metrics</h5>
+          <div class="metrics-grid">
+            {% for key, value in metrics.items() %}
+              <div class="metric-card" data-metric="{{ key }}">
+                <div class="metric-name">{{ key | replace("_", " ") | title }}</div>
+                <div class="metric-value">{{ value }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Modal for fullscreen image -->
+<div class="modal" id="imageModal">
+  <div class="close-modal" id="closeModal">×</div>
+  <div class="modal-content">
+    {% if run.graph_path %}
+      <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" 
+           class="modal-image" id="modalImage" alt="Model visualization">
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const imageContainer = document.getElementById('imageContainer');
+    const modelImage = document.getElementById('modelImage');
+    const zoomInBtn = document.getElementById('zoomIn');
+    const zoomOutBtn = document.getElementById('zoomOut');
+    const fullscreenBtn = document.getElementById('fullscreen');
+    const imageModal = document.getElementById('imageModal');
+    const closeModal = document.getElementById('closeModal');
+    const metricCards = document.querySelectorAll('.metric-card');
+    
+    // Variables
+    let scale = 1;
+    const maxScale = 3;
+    const minScale = 0.5;
+    const scaleStep = 0.2;
+    
+    // Apply animations to elements
+    const animateElements = () => {
+      const elements = document.querySelectorAll('.info-item, .metric-card');
+      elements.forEach((el, index) => {
+        setTimeout(() => {
+          el.classList.add('fade-in');
+        }, 100 * index);
+      });
+    };
+    
+    // Initialize animations
+    setTimeout(animateElements, 300);
+    
+    // Zoom functionality
+    if (zoomInBtn && zoomOutBtn && modelImage) {
+      zoomInBtn.addEventListener('click', () => {
+        if (scale < maxScale) {
+          scale += scaleStep;
+          modelImage.style.transform = `scale(${scale})`;
+        }
+      });
+      
+      zoomOutBtn.addEventListener('click', () => {
+        if (scale > minScale) {
+          scale -= scaleStep;
+          modelImage.style.transform = `scale(${scale})`;
+        }
+      });
+    }
+    
+    // Fullscreen modal
+    if (fullscreenBtn && imageModal && modelImage) {
+      fullscreenBtn.addEventListener('click', () => {
+        imageModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      closeModal.addEventListener('click', () => {
+        imageModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Close modal on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+          imageModal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // Close modal when clicking outside the image
+      imageModal.addEventListener('click', (e) => {
+        if (e.target === imageModal) {
+          imageModal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    }
+    
+    // Double click on image to open modal
+    if (modelImage && imageModal) {
+      modelImage.addEventListener('dblclick', () => {
+        imageModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+    
+    // Interactive metrics
+    metricCards.forEach(card => {
+      card.addEventListener('click', () => {
+        // Toggle highlight effect
+        metricCards.forEach(c => c.classList.remove('pulse'));
+        card.classList.add('pulse');
+        
+        // You could add more interactivity here, like showing a tooltip with more details
+        // or highlighting related information
+      });
+    });
+    
+    // Pan functionality for image (when zoomed in)
+    if (modelImage) {
+      let isDragging = false;
+      let startX, startY, translateX = 0, translateY = 0;
+      
+      modelImage.addEventListener('mousedown', (e) => {
+        if (scale > 1) {
+          isDragging = true;
+          startX = e.clientX - translateX;
+          startY = e.clientY - translateY;
+          modelImage.style.cursor = 'grabbing';
+        }
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        
+        // Limit panning based on zoom level
+        const maxTranslate = 100 * (scale - 1);
+        translateX = Math.max(-maxTranslate, Math.min(translateX, maxTranslate));
+        translateY = Math.max(-maxTranslate, Math.min(translateY, maxTranslate));
+        
+        modelImage.style.transform = `scale(${scale}) translate(${translateX/scale}px, ${translateY/scale}px)`;
+      });
+      
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        modelImage.style.cursor = 'zoom-in';
+      });
+      
+      // Reset transform on double click
+      modelImage.addEventListener('dblclick', () => {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        modelImage.style.transform = 'scale(1) translate(0, 0)';
+      });
+    }
+  });
+</script>
+{% endblock %}
