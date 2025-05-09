@@ -1,8 +1,15 @@
+import json
 import os
 from datetime import datetime
 
+import pandas as pd
 from app import db
-from app.models import UploadedData, User
+from app.forms import SelectModelForm
+from app.models import ModelRun, SharedResult, UploadedData, User
+from app.static.ml_model.DataWashing import DataWashing
+from app.static.ml_model.K_means import kmeans_function
+from app.static.ml_model.LinearRegression import LinearRegressionTraining
+from app.static.ml_model.SVM_classifier import SVMClassifier
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -114,6 +121,7 @@ def upload():
         # Get file stats
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size  # in bytes
+        upload_date = datetime.fromtimestamp(file_stats.st_ctime)
         created_at = datetime.fromtimestamp(file_stats.st_ctime)
 
         # Validate whether the uploaded file is a legal csv file
@@ -129,7 +137,6 @@ def upload():
             filename=filename,
             file_path=filepath,
             file_size=file_size,
-            created_at=created_at,
             user_id=current_user.id,
             upload_date=datetime.now()
         )
@@ -172,7 +179,15 @@ def delete_file(file_id):
 def select_model():
     form = SelectModelForm()
     # get user id
+    user_id = current_user.id
     form.user_id.data = current_user.id
+
+    upload_path = os.path.join('data', 'uploads', str(user_id))#fl stored in the data/uploads/<user_id>/csv we ar joining t
+    try:
+        file_list = os.listdir(upload_path)
+        file_list = [f for f in file_list if f.endswith('.csv')] #csv only check
+    except FileNotFoundError:
+        file_list = []
 
     if form.validate_on_submit():
         # read the parameters
@@ -181,10 +196,48 @@ def select_model():
         precision_mode = form.precision_mode.data
         target_index   = form.target_index.data
         has_header     = form.has_header.data
+        selected_file = request.form.get('file_select')
+        print("user_id =", user_id)
+        print("selected_file =", selected_file)
 
         
+        filepath = os.path.join(upload_path, selected_file)
+        raw_df = pd.read_csv(filepath, header=0 if has_header else None)
+        cleaned_df = DataWashing(raw_df)
+
+        if model_type == 'SVM':
+            result, success = SVMClassifier(cleaned_df, target_index, precision_mode)
+        elif model_type == 'linear_regression':
+            result, success = LinearRegressionTraining(cleaned_df, target_index, precision_mode)
+        elif model_type == 'KMeans':
+            result, success = kmeans_function(cleaned_df, precision_mode)
+        else:
+            result, success = {'error': 'Unsupported model type'}, False
+
+        if success:
+            # Save result to DB (optional)
+            model_run = ModelRun(
+                user_id=user_id,
+                filename=selected_file,
+                model_type=model_type,
+                precision_mode=precision_mode,
+                target_index=target_index,
+                has_header=has_header,
+                graph_path=result.get('plot_path'),
+                
+                result_json=json.dumps(result),
+                created_at=datetime.now()
+            )
+            db.session.add(model_run)
+            db.session.commit()
+            flash("Model execution Success: " + str(result))
+
+        else:
+            flash("Model execution failed: " + str(result), "danger")
+
         return redirect(url_for(
             'main.dashboard',
+            filename=selected_file,
             user_id=user_id,
             model_type=model_type,
             precision_mode=precision_mode,
@@ -192,4 +245,73 @@ def select_model():
             has_header=int(has_header)
         ))
 
-    return render_template('select_model.html', form=form)
+    return render_template('select_model.html', form=form,file_list=file_list)
+
+@main.route('/results', methods=['GET'])
+@login_required
+def results():
+    user_id = current_user.id
+    results = ModelRun.query.filter_by(user_id=user_id).order_by(ModelRun.created_at.desc()).all()
+    return render_template('results.html', results=results)
+
+@main.route('/share_result/<int:run_id>', methods=['POST'])
+@login_required
+def share_result(run_id):
+    recipient_username = request.form.get('recipient_username')
+    recipient = User.query.filter_by(username=recipient_username).first()
+
+    if not recipient:
+        flash("User not found.", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    original = ModelRun.query.get_or_404(run_id)
+    if original.user_id != current_user.id:
+        flash("Unauthorized share attempt.", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    # Save shared result as a reference
+    shared = SharedResult(
+        sender_id=current_user.id,
+        receiver_id=recipient.id,
+        modelrun_id=original.id,
+        result_snapshot=original.result_json,
+        shared_at=datetime.now()
+    )
+    db.session.add(shared)
+    db.session.commit()
+    flash(f"Result shared with {recipient_username}.", "success")
+    return redirect(url_for('main.dashboard'))
+
+@main.route('/view_result/<int:run_id>')
+@login_required
+def view_result(run_id):
+    run = ModelRun.query.get_or_404(run_id)
+    if run.user_id != current_user.id:
+        flash('error')
+
+    # Optionally parse JSON
+    import json
+    metrics = {}
+    if run.result_json:
+        try:
+            metrics = json.loads(run.result_json)
+        except:
+            pass
+
+    return render_template('view.html', run=run, metrics=metrics)
+
+@main.route('/shared_with_me')
+@login_required
+def shared_with_me():
+    shared_items = SharedResult.query.filter_by(receiver_id=current_user.id).all()
+
+    # Attach parsed result as `parsed_metrics` to each item
+    for item in shared_items:
+        try:
+            item.parsed_metrics = json.loads(item.result_snapshot)
+        except:
+            item.parsed_metrics = {}
+
+    return render_template('shared_results.html', shared_items=shared_items)
+    
+

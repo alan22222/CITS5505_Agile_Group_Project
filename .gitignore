@@ -1,1 +1,10 @@
-app/__pycache__/
+../../.env
+../../__pycache__/__init__.cpython-311.pyc
+../../__pycache__/__init__.cpython-312.pyc
+../../__pycache__/forms.cpython-312.pyc
+../../__pycache__/models.cpython-312.pyc
+../../__pycache__/routes.cpython-312.pyc
+../../set_api_key.py
+__pycache__/
+../../.env
+../../set_api_key.py

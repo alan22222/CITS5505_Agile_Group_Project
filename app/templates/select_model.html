@@ -7,6 +7,17 @@
   <form method="POST">
     {{ form.hidden_tag() }}
 
+    
+    <div class="mb-3">
+      <label for="file_select" class="form-label">Select File</label>
+      <select name="file_select" id="file_select" class="form-select" required>
+        <option value="" disabled selected>Choose a CSV file</option>
+        {% for file in file_list %}
+          <option value="{{ file }}">{{ file }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
     <div class="mb-3">
       {{ form.model_type.label(class="form-label") }}
       {{ form.model_type(class="form-select") }}
