@@ -1,0 +1,14 @@
+../../.env
+../../__pycache__/__init__.cpython-311.pyc
+../../__pycache__/__init__.cpython-312.pyc
+../../__pycache__/forms.cpython-312.pyc
+../../__pycache__/models.cpython-312.pyc
+../../__pycache__/routes.cpython-312.pyc
+../../set_api_key.py
+__pycache__/
+.DS_Store
+app/.env
+app/env.zip
+app/plotting/
+app/set_api_key.py
+app/unit_test/LinearR·egression_test.py
