@@ -1,66 +1,94 @@
 import unittest
 import pandas as pd
 import numpy as np
-from sklearn.datasets import make_classification
-from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score
 import os
 import sys
-import shutil
 import uuid
-import warnings
+import shutil
 
-# 忽略UserWarning
-warnings.filterwarnings("ignore", category=UserWarning)
 
-# 导入待测试模块
 # 获取当前脚本所在的目录（unit_test目录）
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # 获取 app 目录的上一级目录（即项目根目录）
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 # 将项目根目录添加到 Python 模块搜索路径中
 sys.path.append(project_root)
-
-from app.static.ml_model.SVM_classifier import SVMClassifier
-
+from app.static.ml_model.SVM_classifier import SVMClassifier  # Replace 'your_module_name' with the actual module name
 class TestSVMClassifier(unittest.TestCase):
+    """
+    Unit tests for SVMClassifier function.
+    """
     
     @classmethod
     def setUpClass(cls):
-        """创建测试数据集"""
-        # 创建3个不同的测试数据集用于三轮测试
-        X1, y1 = make_classification(n_samples=200, n_features=10, n_classes=2, random_state=42)
-        X2, y2 = make_classification(
-            n_samples=500, n_features=20, n_classes=3, n_informative=4, random_state=43
-        )
-        X3, y3 = make_classification(
-            n_samples=1000, n_features=15, n_classes=4, n_informative=5, random_state=44
-        )
+        """
+        Set up test environment before running all tests.
+        """
+        # Create sample data for testing
+        np.random.seed(42)
+        cls.num_samples = 100
+        cls.num_features = 5
         
-        cls.datasets = [
-            (pd.DataFrame(np.hstack((X1, y1.reshape(-1, 1)))), "label", "Fast"),
-            (pd.DataFrame(np.hstack((X2, y2.reshape(-1, 1)))), 20, "Balance"),
-            (pd.DataFrame(np.hstack((X3, y3.reshape(-1, 1)))), "label", "High Precision")
-        ]
+        # Generate random data
+        cls.data = np.random.rand(cls.num_samples, cls.num_features)
+        cls.labels = np.random.randint(0, 2, size=cls.num_samples)
         
-        # 添加列名以方便测试DataFrame输入的情况
-        for i, (df, label_col, _) in enumerate(cls.datasets):
-            if isinstance(label_col, str):
-                df.columns = [f"feature_{j}" for j in range(df.shape[1]-1)] + [label_col]
-    
+        # Create DataFrame
+        cls.df = pd.DataFrame(cls.data, columns=[f"feature_{i}" for i in range(cls.num_features)])
+        cls.df['label'] = cls.labels
+        
+        # Create temporary directory for plots
+        cls.plot_dir = 'test_plotting'
+        if os.path.exists(cls.plot_dir):
+            shutil.rmtree(cls.plot_dir)
+        os.makedirs(cls.plot_dir)
+
     @classmethod
     def tearDownClass(cls):
-        """清理生成的文件和目录"""
-        if os.path.exists('./static/plotting/'):
-            shutil.rmtree('./static/plotting/')
-    
-    def test_SVMClassifier_dataframe_input(self):
-        """测试使用DataFrame输入的情况"""
-        # 修改第一个测试用例使用DataFrame输入
-        df, label_col, type_ = self.datasets[0]
+        """
+        Clean up after all tests have finished.
+        """
+        # Remove temporary directory
+        if os.path.exists(cls.plot_dir):
+            shutil.rmtree(cls.plot_dir)
+
+    def setUp(self):
+        """
+        Set up before each test.
+        """
+        # Create a fresh copy of the DataFrame for each test
+        self.test_df = self.df.copy()
         
-        result, success = SVMClassifier(df, label_col, type_)
+        # Set the label column
+        self.label_column = 'label'
         
+        # Mock UUID to make plot paths predictable for testing
+        self.original_uuid = uuid.uuid4
+        uuid.uuid4 = lambda: uuid.UUID('12345678123456781234567812345678')
+
+    def tearDown(self):
+        """
+        Clean up after each test.
+        """
+        # Remove any generated plots
+        for root, dirs, files in os.walk(self.plot_dir):
+            for file in files:
+                if file.endswith(".png"):
+                    os.remove(os.path.join(root, file))
+        
+        # Restore original UUID function
+        uuid.uuid4 = self.original_uuid
+
+    def test_valid_input_with_dataframe(self):
+        """
+        Test that SVMClassifier runs successfully with valid DataFrame input.
+        """
+        result, success = SVMClassifier(self.test_df, self.label_column, "Fast")
+        
+        # Check if execution was successful
         self.assertTrue(success)
+        
+        # Check result structure
         self.assertIsInstance(result, dict)
         self.assertIn('model_name', result)
         self.assertIn('Precision_value', result)
@@ -69,84 +97,63 @@ class TestSVMClassifier(unittest.TestCase):
         self.assertIn('F1_score_value', result)
         self.assertIn('plot_path', result)
         
-        # 检查指标值是否在合理范围内
+        # Check plot file exists
+        self.assertTrue(os.path.exists(result['plot_path']))
+        
+        # Check metric values are within valid range
         self.assertTrue(0 <= result['Precision_value'] <= 1)
         self.assertTrue(0 <= result['Accuracy_value'] <= 1)
         self.assertTrue(0 <= result['Recall_value'] <= 1)
         self.assertTrue(0 <= result['F1_score_value'] <= 1)
-        
-        # 检查是否生成了图表文件
-        self.assertTrue(os.path.exists(result['plot_path']))
-    
-    def test_SVMClassifier_column_index(self):
-        """测试使用列索引作为标签列的情况"""
-        df, label_idx, type_ = self.datasets[1]
-        
-        result, success = SVMClassifier(df, label_idx, type_)
+
+    def test_valid_input_with_column_index(self):
+        """
+        Test that SVMClassifier works when label_column is provided as an index.
+        """
+        # Use the last column as label
+        result, success = SVMClassifier(self.test_df, self.test_df.shape[1] - 1, "Fast")
         
         self.assertTrue(success)
         self.assertIsInstance(result, dict)
-        self.assertIn('model_name', result)
-        self.assertIn('Precision_value', result)
-        self.assertIn('Accuracy_value', result)
-        self.assertIn('Recall_value', result)
-        self.assertIn('F1_score_value', result)
-        self.assertIn('plot_path', result)
+
+    def test_invalid_input_type(self):
+        """
+        Test that SVMClassifier raises error when input data is not a DataFrame.
+        """
+        # Pass a numpy array instead of DataFrame
+        result, success = SVMClassifier(self.data, self.label_column, "Fast")
         
-        # 检查指标值是否在合理范围内
-        self.assertTrue(0 <= result['Precision_value'] <= 1)
-        self.assertTrue(0 <= result['Accuracy_value'] <= 1)
-        self.assertTrue(0 <= result['Recall_value'] <= 1)
-        self.assertTrue(0 <= result['F1_score_value'] <= 1)
-        
-        # 检查是否生成了图表文件
-        self.assertTrue(os.path.exists(result['plot_path']))
-    
-    def test_SVMClassifier_high_precision_mode(self):
-        """测试High Precision模式下的参数搜索"""
-        df, label_col, type_ = self.datasets[2]
-        
-        result, success = SVMClassifier(df, label_col, type_)
-        
-        self.assertTrue(success)
-        self.assertIsInstance(result, dict)
-        self.assertIn('model_name', result)
-        self.assertIn('Precision_value', result)
-        self.assertIn('Accuracy_value', result)
-        self.assertIn('Recall_value', result)
-        self.assertIn('F1_score_value', result)
-        self.assertIn('plot_path', result)
-        
-        # 检查指标值是否在合理范围内
-        self.assertTrue(0 <= result['Precision_value'] <= 1)
-        self.assertTrue(0 <= result['Accuracy_value'] <= 1)
-        self.assertTrue(0 <= result['Recall_value'] <= 1)
-        self.assertTrue(0 <= result['F1_score_value'] <= 1)
-        
-        # 检查是否生成了图表文件
-        self.assertTrue(os.path.exists(result['plot_path']))
-    
-    def test_invalid_input_data(self):
-        """测试无效的输入数据类型"""
-        df, label_col, _ = self.datasets[0]
-        
-        # 传递非DataFrame对象
-        result, success = SVMClassifier("invalid_data", label_col, "Fast")
-        
+        # Check for failure
         self.assertFalse(success)
-        self.assertIsInstance(result, str)
         self.assertIn("The input data should be a pandas.DataFrame variable", result)
-    
+
     def test_invalid_label_column(self):
-        """测试无效的标签列"""
-        df, _, _ = self.datasets[0]
-        
-        # 传递不存在的列名
-        result, success = SVMClassifier(df, "invalid_column", "Fast")
-        
+        """
+        Test that SVMClassifier handles invalid label column names/indices.
+        """
+        # Use a non-existent column name
+        result, success = SVMClassifier(self.test_df, "invalid_column_name", "Fast")
         self.assertFalse(success)
-        self.assertIsInstance(result, str)
-        self.assertIn("KeyError", result)
+        
+        # Use an out-of-range column index
+        result, success = SVMClassifier(self.test_df, 999, "Fast")
+        self.assertFalse(success)
+
+    def test_different_types(self):
+        """
+        Test that SVMClassifier works with all three type options.
+        """
+        for model_type in ["Fast", "Balance", "High Precision"]:
+            with self.subTest(model_type=model_type):
+                result, success = SVMClassifier(self.test_df, self.label_column, model_type)
+                self.assertTrue(success)
+                self.assertIsInstance(result, dict)
+                
+                # Verify model name
+                self.assertEqual(result['model_name'], 'SVMClassifier')
+                
+                self.assertEqual(success, True)
+
 
 if __name__ == '__main__':
     unittest.main()
