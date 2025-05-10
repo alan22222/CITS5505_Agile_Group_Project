@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import os
 import uuid
 
-def LinearRegressionTraining(clean_data, label_column, type):
+def LinearRegressionTraining(clean_data:pd.DataFrame, label_column, type:str):
     try:
         if isinstance(clean_data, pd.DataFrame):
             df = clean_data
@@ -19,7 +19,7 @@ def LinearRegressionTraining(clean_data, label_column, type):
         # Handle label column (could be index or name)
         if isinstance(label_column, str):
             y = df[label_column]
-            label_column = df.columns.get_loc[label_column]
+            label_column = df.columns.get_loc(label_column)
             X = df.drop(df.columns[label_column], axis=1)
             
         else:
@@ -29,7 +29,7 @@ def LinearRegressionTraining(clean_data, label_column, type):
         # Split data
         X_train, X_val, y_train, y_val = train_test_split(
             X, y, test_size=0.2, random_state=42, shuffle=True)
-        matplotlib.use('Agg') # Make sure plotting method will not be blocked by MacOS
+        matplotlib.use('Agg') # This line is only to make sure plotting method will not be blocked by MacOS thread protector
         # Create pipeline
         pipeline = Pipeline([
             ('scaler', StandardScaler()),
@@ -125,3 +125,12 @@ def LinearRegressionTraining(clean_data, label_column, type):
         print(error_message)
         result = error_message
         return result, False
+if __name__ == "__main__":
+    np.random.seed(42)
+    test_data = pd.DataFrame({
+        'feature1': np.random.rand(100),
+        'feature2': np.random.rand(100),
+        'target': np.random.rand(100)})
+    result, flag = LinearRegressionTraining(clean_data=test_data, label_column="target", type="Fast")
+    print(result)
+    print(flag)

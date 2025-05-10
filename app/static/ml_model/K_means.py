@@ -142,7 +142,7 @@ def plot_radar_chart(X, labels, n_clusters):
         
         # Save plot
         timestamp = datetime.now().strftime("%H-%M-%S_%d-%m-%Y")
-        plot_path = f"./static/plotting/kmeans_radar_{timestamp}.png"
+        plot_path = f"app/plotting/kmeans_radar_{timestamp}.png"
         plt.savefig(plot_path, bbox_inches='tight')
         plt.close()
         return plot_path
