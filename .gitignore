@@ -12,3 +12,4 @@ app/env.zip
 app/plotting/
 app/set_api_key.py
 app/unit_test/LinearR·egression_test.py
+instance/database.db

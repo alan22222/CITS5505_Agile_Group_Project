@@ -10,7 +10,7 @@ from app.static.ml_model.DataWashing import DataWashing
 from app.static.ml_model.K_means import kmeans_function
 from app.static.ml_model.LinearRegression import LinearRegressionTraining
 from app.static.ml_model.SVM_classifier import SVMClassifier
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
