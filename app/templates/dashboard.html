@@ -26,15 +26,15 @@
         <i class="bi bi-upload display-4 mb-3 text-primary"></i>
         <span class="action-text">Upload Data</span>
     </a>
-    <a href="/analyze" class="action-button analyze-btn">
+    <a href="/results" class="action-button analyze-btn">
         <span class="action-icon">🔍</span>
         <i class="bi bi-bar-chart-line display-4 mb-3 text-success"></i>
         <span class="action-text">Analyze</span>
     </a>
-    <a href="/reports" class="action-button report-btn">
+    <a href="/shared_with_me" class="action-button report-btn">
         <span class="action-icon">📝</span>
         <i class="bi bi-clipboard2-data display-4 mb-3 text-info"></i>
-        <span class="action-text">Reports</span>
+        <span class="action-text">Shares</span>
     </a>
 </div><br><br>
     <!-- Stats Cards -->
@@ -51,15 +51,15 @@
             <div class="stat-icon analysis-icon">📈</div>
             <div class="stat-info">
                 <h3>Analyses</h3>
-                <p class="stat-value">{{ analyses_count|default('0') }}</p>
+                <p class="stat-value">{{ model_count |default('0') }}</p>
             </div>
         </div>
         
         <div class="stat-card">
             <div class="stat-icon reports-icon">📄</div>
             <div class="stat-info">
-                <h3>Reports</h3>
-                <p class="stat-value">{{ reports_count|default('0') }}</p>
+                <h3>Shares</h3>
+                <p class="stat-value">{{ share_result_count |default('0') }}</p>
             </div>
         </div>
     </div>
