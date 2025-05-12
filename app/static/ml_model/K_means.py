@@ -1,13 +1,17 @@
-import os
-import pandas as pd
-import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import mean_squared_error, silhouette_score
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-from datetime import datetime
 import json
+import os
+import uuid
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from flask import current_app
+from sklearn.cluster import KMeans
+from sklearn.metrics import mean_squared_error, silhouette_score
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.preprocessing import StandardScaler
+
 
 def kmeans_function(clean_content, type):
     result = {
@@ -141,11 +145,22 @@ def plot_radar_chart(X, labels, n_clusters):
         ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
         
         # Save plot
-        timestamp = datetime.now().strftime("%H-%M-%S_%d-%m-%Y")
-        plot_path = f"./static/plotting/kmeans_radar_{timestamp}.png"
-        plt.savefig(plot_path, bbox_inches='tight')
+        plotting_dir = os.path.join(current_app.root_path, 'static', 'plotting')
+        plotting_dir = os.path.abspath(plotting_dir)
+        os.makedirs(plotting_dir, exist_ok=True)
+
+        # Generate unique filename
+        filename = f"{uuid.uuid4()}.png"
+        plot_path = os.path.join(plotting_dir, filename)
+
+        # Save the plot
+        plt.savefig(plot_path)
         plt.close()
-        return plot_path
+
+    # Save this in DB for template usage
+        relative_path = f'plotting/{filename}'
+        graph_path = relative_path
+        return graph_path
         
     except Exception as e:
         print(f"Error in plot_radar_chart: {str(e)}")
