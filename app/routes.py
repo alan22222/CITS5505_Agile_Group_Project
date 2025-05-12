@@ -3,19 +3,22 @@ import os
 from datetime import datetime
 
 import pandas as pd
-from app import db
-from app.forms import SelectModelForm
-from app.models import ModelRun, SharedResult, UploadedData, User
-from app.static.ml_model.DataWashing import DataWashing
-from app.static.ml_model.K_means import kmeans_function
-from app.static.ml_model.LinearRegression import LinearRegressionTraining
-from app.static.ml_model.SVM_classifier import SVMClassifier
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (Blueprint, flash, jsonify, redirect, render_template,
+                   request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-main = Blueprint('main', __name__)
+from app import db
+from app.forms import SelectModelForm
+from app.models import ModelRun, SharedResult, UploadedData, User
+from app.static.ml_model.DataWashing import DataWashing
+from app.static.ml_model.gptassistant import GPT_column_suggestion
+from app.static.ml_model.K_means import kmeans_function
+from app.static.ml_model.LinearRegression import LinearRegressionTraining
+from app.static.ml_model.SVM_classifier import SVMClassifier
+
+main = Blueprint('main', __name__)#flask blueprint definied and stored
 
 @main.route('/')
 def index():
@@ -28,32 +31,34 @@ def index():
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
+    #redirect authenticated user to the dahsboard
     if current_user.is_authenticated:
             return redirect(url_for('main.dashboard', user_id=current_user.id))
-    
+    #handle the user submission 
     if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        username = request.form.get('username')#username from iser
+        email = request.form.get('email')#email form the user
+        password = request.form.get('password')#get the password formuser
 
-      
+      #check if the isername already exists
         if User.query.filter_by(username=username).first():
             flash("Username already exists!")
             return redirect(url_for('main.register'))
+            #check if the email already exists
         if User.query.filter_by(email=email).first():
                 flash('Email already exists')
                 return redirect(url_for('main.register'))
             
-            # Create new user
-
-        hashed_password = generate_password_hash(password)
-        new_user = User(username=username, password=hashed_password, email=email)
-        db.session.add(new_user)
-        db.session.commit()      
+            
+        # Create new user
+        hashed_password = generate_password_hash(password)#hashed  password for security
+        new_user = User(username=username, password=hashed_password, email=email)#new user instance is created
+        db.session.add(new_user)#add new user to db
+        db.session.commit()      #save the user in  database
         flash('Registration successful! Please login.')
-        return redirect(url_for('main.login'))
+        return redirect(url_for('main.login'))#redirected to login page 
 
-    return render_template('register.html')
+    return render_template('register.html')#request for registration is displayed
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -93,7 +98,13 @@ def dashboard(user_id=None):
     
     datasets = UploadedData.query.filter_by(user_id=user_id).order_by(UploadedData.upload_date.desc()).all()
     datasets_count = len(datasets) 
-    return render_template('dashboard.html', username=current_user.username, user_id=current_user.id, datasets=datasets,datasets_count=datasets_count)
+    dataset_modelrun = ModelRun.query.filter_by(user_id=user_id).order_by(ModelRun.created_at.desc()).all()
+    model_count = len(dataset_modelrun)
+    received_result = SharedResult.query.filter_by(receiver_id=current_user.id).order_by(SharedResult.shared_at.desc()).all()
+    share_result_count = len(received_result)
+
+    return render_template('dashboard.html', username=current_user.username, user_id=current_user.id, datasets=datasets,
+                           datasets_count=datasets_count, model_count=model_count, share_result_count=share_result_count)
 
 @main.route('/upload', methods=['GET', 'POST'])
 @login_required
@@ -115,6 +126,19 @@ def upload():
         filepath = os.path.join(upload_folder, filename)
         file.save(filepath)
 
+        df = pd.read_csv(filepath)
+
+        # Slice the dataset and prepare JSON
+        data_slice = df.head(10).values.tolist()  # Only send top 10 rows to GPT
+        gpt_input = {
+            "data": data_slice,
+            "label_column": -1  # Dummy label column, GPT will analyze all
+        }
+
+        # Use your GPT_column_suggestion function
+        suggested_target_col = GPT_column_suggestion(json.dumps(gpt_input))
+
+
         # Get file stats
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size  # in bytes
@@ -131,7 +155,8 @@ def upload():
         db.session.add(uploaded_data)
         db.session.commit()
         flash(f"Upload successful: {filename}", "success")
-        return redirect(url_for('main.select_model', data_id=uploaded_data.id))
+        flash(f"Model Used: {suggested_target_col}", "info")
+        return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename ))
 
     return render_template(
         'upload.html',
@@ -144,20 +169,18 @@ def upload():
 def delete_file(file_id):
     dataset = UploadedData.query.get_or_404(file_id)
 
-    # Ensure user owns the file
     if dataset.user_id != current_user.id:
         flash("Unauthorized action.", "danger")
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.dashboard', user_id=current_user.id))
 
-    # Delete file from filesystem if it exists
     if os.path.exists(dataset.file_path):
         os.remove(dataset.file_path)
 
-    # Delete from database
     db.session.delete(dataset)
     db.session.commit()
     flash(f"File '{dataset.filename}' deleted.", "success")
-    return redirect(url_for('main.dashboard'))
+    return redirect(url_for('main.dashboard', user_id=current_user.id))
+
 
 @main.route('/select_model', methods=['GET', 'POST'])
 @login_required
@@ -216,6 +239,7 @@ def select_model():
             db.session.add(model_run)
             db.session.commit()
             flash("Model execution Success: " + str(result))
+            return redirect(url_for('main.results'))
 
         else:
             flash("Model execution failed: " + str(result), "danger")
@@ -248,6 +272,11 @@ def share_result(run_id):
     if not recipient:
         flash("User not found.", "danger")
         return redirect(url_for('main.dashboard'))
+    
+    if recipient.id == current_user.id:
+        flash("You cannot share a result with yourself.", "warning")
+        return redirect(url_for('main.dashboard', user_id=current_user.id))
+
 
     original = ModelRun.query.get_or_404(run_id)
     if original.user_id != current_user.id:
@@ -265,14 +294,14 @@ def share_result(run_id):
     db.session.add(shared)
     db.session.commit()
     flash(f"Result shared with {recipient_username}.", "success")
-    return redirect(url_for('main.dashboard'))
+    return redirect(url_for('main.dashboard', user_id=current_user.id))
 
 @main.route('/view_result/<int:run_id>')
 @login_required
 def view_result(run_id):
     run = ModelRun.query.get_or_404(run_id)
     if run.user_id != current_user.id:
-        flash('error')
+        flash('retrieved')
 
     # Optionally parse JSON
     import json
@@ -300,3 +329,10 @@ def shared_with_me():
     return render_template('shared_results.html', shared_items=shared_items)
     
 
+@main.route('/username_autocomplete')
+@login_required
+def username_autocomplete():
+    query = request.args.get('q', '')
+    results = User.query.filter(User.username.ilike(f"%{query}%")).filter(User.id != current_user.id).limit(5).all()
+    usernames = [user.username for user in results]
+    return jsonify(usernames=usernames)
