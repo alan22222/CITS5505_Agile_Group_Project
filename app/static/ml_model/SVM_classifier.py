@@ -1,13 +1,17 @@
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score
-import matplotlib.pyplot as plt
 import os
 import uuid
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from flask import current_app
+from sklearn.metrics import (accuracy_score, f1_score, precision_score,
+                             recall_score)
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
+
 
 def SVMClassifier(clean_data, label_column, type):
     try:
@@ -90,16 +94,27 @@ def SVMClassifier(clean_data, label_column, type):
         f1 = f1_score(y_val, y_pred, average='weighted')
         
         # Plotting (confusion matrix)
-        from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+        from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
         cm = confusion_matrix(y_val, y_pred)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm)
         disp.plot()
         
         # Save plot
-        os.makedirs('app/plotting/', exist_ok=True)
-        plot_path = f'app/plotting/{uuid.uuid4()}.png'
+        plotting_dir = os.path.join(current_app.root_path, 'static', 'plotting')
+        plotting_dir = os.path.abspath(plotting_dir)
+        os.makedirs(plotting_dir, exist_ok=True)
+
+        # Generate unique filename
+        filename = f"{uuid.uuid4()}.png"
+        plot_path = os.path.join(plotting_dir, filename)
+
+        # Save the plot
         plt.savefig(plot_path)
         plt.close()
+
+    # Save this in DB for template usage
+        relative_path = f'plotting/{filename}'
+        graph_path = relative_path
         
         # Prepare result
         result = {
@@ -108,7 +123,7 @@ def SVMClassifier(clean_data, label_column, type):
             'Accuracy_value': accuracy,
             'Recall_value': recall,
             'F1_score_value': f1,
-            'plot_path': plot_path
+            'plot_path': graph_path
         }
         
         return result, True

@@ -6,10 +6,10 @@
   <h2 class="mb-4">Your Model Analyses</h2>
   <div class="row">
     {% for run in results %}
-      <div class="col-md-5 mb-4">
+      <div class="col-4 md-5 mb-4">
         <div class="card shadow-sm h-100 text-center" style="width: 18rem;">
           {% if run.graph_path %}
-             <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" class="card-img-top" alt="Plot">
+             <img src="{{ url_for('static', filename=run.graph_path) }}" class="card-img-top" alt="Plot">
           {% endif %}
           <div class="card-body">
             <h6 class="card-title">{{ run.model_type | title }}</h6>
@@ -37,7 +37,8 @@
             </div>
             <div class="modal-body">
               <label for="recipient_username" class="form-label">Recipient Username:</label>
-              <input type="text" name="recipient_username" class="form-control" required>
+              <input type="text" id="recipient_username" name="recipient_username" class="form-control" autocomplete="off" required>
+              <div id="username-suggestions" class="list-group"></div>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-success">Share</button>
@@ -49,3 +50,39 @@
   </div>
 </div>
 {% endblock %}
+{% block scripts %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#recipient_username').keyup(function() {
+        let query = $(this).val();
+
+        if (query.length >= 1) {
+            $.ajax({
+                url: "{{ url_for('main.username_autocomplete') }}",
+                method: 'GET',
+                data: { q: query },
+                success: function(data) {
+                    let suggestions = $('#username-suggestions');
+                    suggestions.empty();
+
+                    data.usernames.forEach(function(username) {
+                        suggestions.append(`<button type="button" class="list-group-item list-group-item-action">${username}</button>`);
+                    });
+
+                    // When a suggestion is clicked
+                    $('.list-group-item').click(function() {
+                        $('#recipient_username').val($(this).text());
+                        suggestions.empty();
+                    });
+                }
+            });
+        } else {
+            $('#username-suggestions').empty();
+        }
+    });
+});
+</script>
+{% endblock %}
+

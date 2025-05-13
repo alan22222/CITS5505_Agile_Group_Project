@@ -68,11 +68,21 @@
     <div class="container mt-4">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <div class="alert alert-info">
+        <div class="alert alert-info alert-dismissible fade show" role="alert" id="flash-message">
             {% for message in messages %}
-            <p>{{ message }}</p>
+            <p class="mb-0">{{ message }}</p>
             {% endfor %}
         </div>
+        <script>
+            setTimeout(function(){
+            var alert = document.getElementById('flash-message');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                alert.style.opacity = 0;
+            }
+        }, 3000);
+        </script>
         {% endif %}
         {% endwith %}
 
