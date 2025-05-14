@@ -22,7 +22,7 @@ def LinearRegressionTraining(clean_data, label_column, type):
         # Handle label column (could be index or name)
         if isinstance(label_column, str):
             y = df[label_column]
-            label_column = df.columns.get_loc[label_column]
+            label_column = df.columns.get_loc(label_column)
             X = df.drop(df.columns[label_column], axis=1)
             
         else:

@@ -14,8 +14,6 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">{{ heading }}</h1>
         <form action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
             <div class="mb-3">
                 <label for="fileUpload" class="file-upload-btn">Choose File</label> <!-- styled choose File button -->
                 <input class="form-control" type="file" id="fileUpload" name="file" accept=".csv"> <!-- set to accept .csv only -->
@@ -45,6 +43,7 @@
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
+        <!-- 引入jQuery和分离后的upload.js -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
     {% endblock %}
