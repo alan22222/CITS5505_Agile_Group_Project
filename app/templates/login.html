@@ -27,6 +27,8 @@
                         <div class="tab-content" id="authTabsContent">
                             <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
                                 <form method="POST" action="{{ url_for('main.login') }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" required>

@@ -2,10 +2,13 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+
+
 
 <div class="container mt-5">
   <div class="container mt-4">
@@ -47,7 +50,9 @@
               </div>
               <div class="modal-body">
                 <label for="recipient_username" class="form-label">Recipient Username:</label>
-                <input type="text" name="recipient_username" class="form-control" required>
+                <input type="text" id="recipient_username" name="recipient_username" class="form-control" autocomplete="off" required>
+                <div id="username-suggestions" class="list-group"></div>
+
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-light">Share</button>
@@ -55,9 +60,46 @@
               </div>
             </form>
           </div>
+
         </div>
       {% endfor %}
     </div>
   </div>
 </div>
 {% endblock %}
+{% block scripts %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#recipient_username').keyup(function() {
+        let query = $(this).val();
+
+        if (query.length >= 1) {
+            $.ajax({
+                url: "{{ url_for('main.username_autocomplete') }}",
+                method: 'GET',
+                data: { q: query },
+                success: function(data) {
+                    let suggestions = $('#username-suggestions');
+                    suggestions.empty();
+
+                    data.usernames.forEach(function(username) {
+                        suggestions.append(`<button type="button" class="list-group-item list-group-item-action">${username}</button>`);
+                    });
+
+                    // When a suggestion is clicked
+                    $('.list-group-item').click(function() {
+                        $('#recipient_username').val($(this).text());
+                        suggestions.empty();
+                    });
+                }
+            });
+        } else {
+            $('#username-suggestions').empty();
+        }
+    });
+});
+</script>
+{% endblock %}
+
