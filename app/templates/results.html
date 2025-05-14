@@ -43,6 +43,7 @@
         <div class="modal fade" id="shareModal{{ run.id }}" tabindex="-1" aria-labelledby="shareModalLabel{{ run.id }}" aria-hidden="true">
           <div class="modal-dialog">
             <form action="{{ url_for('main.share_result',run_id=run.id) }}" method="POST" class="modal-content">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <div class="modal-header">
                 <h5 class="modal-title" id="shareModalLabel{{ run.id }}">Share Result</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
