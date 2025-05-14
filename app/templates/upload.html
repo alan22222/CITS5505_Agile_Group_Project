@@ -14,6 +14,8 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">{{ heading }}</h1>
         <form action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <div class="mb-3">
                 <label for="fileUpload" class="file-upload-btn">Choose File</label> <!-- styled choose File button -->
                 <input class="form-control" type="file" id="fileUpload" name="file" accept=".csv"> <!-- set to accept .csv only -->

@@ -51,8 +51,12 @@ def register():
             
             
         # Create new user
-        hashed_password = generate_password_hash(password)#hashed  password for security
-        new_user = User(username=username, password=hashed_password, email=email)#new user instance is created
+        hashed_pw = generate_password_hash(
+            password,
+            method='pbkdf2:sha256',
+            salt_length=8
+        )#hashed  password for security
+        new_user = User(username=username, email=email, password=hashed_pw)#new user instance is created
         db.session.add(new_user)#add new user to db
         db.session.commit()      #save the user in  database
         flash('Registration successful! Please login.')
@@ -66,8 +70,8 @@ def login():
         return redirect(url_for('main.dashboard', user_id=current_user.id))
 
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.form['username']
+        password = request.form['password']
 
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
