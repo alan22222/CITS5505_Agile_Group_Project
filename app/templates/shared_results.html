@@ -2,26 +2,28 @@
 {% block title %}Shared With Me{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2>Results Shared With You</h2>
-  {% for item in shared_items %}
-  <div class="card my-3 shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title">
-        {{ item.modelrun.model_type | title }}
-        <br><small class="text-muted">Shared by: {{ item.sender.username }}</small>
-      </h5>
-      <p class="card-text"><strong>Shared on:</strong> {{ item.shared_at.strftime('%Y-%m-%d %H:%M') }}</p>
-      <ul>
-        {% for key, value in item.parsed_metrics.items() %}
-          <li><strong>{{ key | replace("_", " ") | title }}:</strong> {{ value }}</li>
-        {% endfor %}
+<div class="container mt-5">
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">{{ heading }}</h1> <!-- amend from <h2>Results Shared With You</h2> to pass value in routes.py-->
+    {% for item in shared_items %}
+    <div class="card my-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ item.modelrun.model_type | title }}
+          <br><small class="text-muted">Shared by: {{ item.sender.username }}</small>
+        </h5>
+        <p class="card-text"><strong>Shared on:</strong> {{ item.shared_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <ul>
+          {% for key, value in item.parsed_metrics.items() %}
+            <li><strong>{{ key | replace("_", " ") | title }}:</strong> {{ value }}</li>
+          {% endfor %}
 
-      </ul>
-      <a href="{{ url_for('main.view_result', run_id=item.modelrun_id) }}" class="btn btn-sm btn-primary">View Full</a>
+        </ul>
+        <a href="{{ url_for('main.view_result', run_id=item.modelrun_id) }}" class="btn btn-sm btn-primary"> <i class="bi bi-binoculars me-2"></i> View Full</a>
+      </div>
     </div>
-  </div>
-{% endfor %}
+  {% endfor %}
 
+  </div>
 </div>
 {% endblock %}

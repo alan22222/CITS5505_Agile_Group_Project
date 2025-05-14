@@ -30,7 +30,7 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
+    color: rgba(0, 86, 179, 1);
 }
 
 /* for layout.html some sharing styling*/
@@ -47,19 +47,28 @@ a:hover {
     box-shadow: var(--box-shadow);
     transition: var(--transition);
     width: 100%;
-    /* display: flex;
-    align-items: center; */
+    display: flex;
+    align-items: center;
     z-index: 1000; 
 }
-/* later double check if need to use z-index to ensure the navbar stays above other content */
-
+/* use z-index to ensure the navbar stays above other content */
 
 .navbar .navbar-nav {
     align-items: center;
+    font-size: 0.85rem;
+}
+
+
+.navbar .container {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .navbar .btn {
     white-space: nowrap; /* Prevents wrapping */
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.2;
 }
 
 .navbar-brand {
@@ -70,7 +79,6 @@ a:hover {
     color: white;
     margin-right: 0.75rem;
     padding-bottom: 0;
-    /* line-height: 1; */
     display: flex;
     align-items: center;
     height: 100%;
@@ -97,11 +105,15 @@ a:hover {
 }
 
 .navbar-collapse {
+    align-items: center;
     background-color: var(--primary-color); /* Matches navbar background */
+    display: flex;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     margin-top: 0;
     transition: var(--transition);
+    /* outline: 2px solid red; */
+    /* the outline color are used for debug */
 
 }
 
@@ -259,6 +271,14 @@ form {
 
 
 /* Responsive Adjustments */
+
+
+@media (max-width: 1000px) {
+.navbar .navbar-nav {
+    font-size: 0.5rem;
+}
+}
+
 @media (max-width: 768px) {
     body {
         padding: 0.5rem;
