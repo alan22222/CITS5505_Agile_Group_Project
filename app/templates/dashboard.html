@@ -6,14 +6,15 @@
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <!-- Custom CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
 
 <div class="dashboard-container">
     <!-- Welcome Header -->
     <div class="welcome-header">
         <div class="welcome-text">
-            <h2>Welcome, {{ username }}</h2>
+            <h2>Welcome back, {{ username }} !</h2>
         </div>
         <div class="date-display">
             <p id="current-date"></p>

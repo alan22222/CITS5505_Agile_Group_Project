@@ -2,51 +2,68 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Your Model Analyses</h2>
-  <div class="row">
-    {% for run in results %}
-      <div class="col-4 md-5 mb-4">
-        <div class="card shadow-sm h-100 text-center" style="width: 18rem;">
-          {% if run.graph_path %}
-             <img src="{{ url_for('static', filename=run.graph_path) }}" class="card-img-top" alt="Plot">
-          {% endif %}
-          <div class="card-body">
-            <h6 class="card-title">{{ run.model_type | title }}</h6>
-            <p class="text-muted" style="font-size: 0.85rem;">
-              {{ run.created_at.strftime('%Y-%m-%d') }}
-            </p>
-            <div class="d-flex justify-content-around" style="gap: 7px;">
-              <!-- View Button -->
-              <a href="{{ url_for('main.view_result', run_id=run.id) }}" class="btn btn-sm btn-primary">View</a>
 
-              <!-- Share Form Button -->
-              <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{ run.id }}">Share</button>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+
+
+
+<div class="container mt-5">
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">{{ heading }}</h1>  <!-- amend from <h2 class="mb-4">Your Model Analyses</h2> to pass value in routes.py-->
+    <div class="row">
+      {% for run in results %}
+        <div class="col-md-5 mb-4">
+          <div class="card shadow-sm h-100 text-center" >
+            <!-- removed the sytle here : style="width: 18rem;" -->
+            {% if run.graph_path %}
+              <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" class="card-img-top" alt="Plot">
+            {% endif %}
+            <div class="card-body">
+              <h6 class="card-title">{{ run.model_type | title }}</h6>
+              <p class="text-muted">
+                 <!-- removed the sytle here :  -->
+                {{ run.created_at.strftime('%Y-%m-%d') }}
+              </p>
+              <div class="d-flex justify-content-around" style="gap: 7px;">
+                <!-- View Button -->
+                <a href="{{ url_for('main.view_result', run_id=run.id) }}" class="btn btn-primary btn-sm">View</a>
+
+                <!-- Share Form Button changed btn-outline-secondary to info type -->
+                 <!-- From words change to share icon -->
+                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#shareModal{{ run.id }}"> <i class="bi bi-share"></i></button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Share Modal -->
-      <div class="modal fade" id="shareModal{{ run.id }}" tabindex="-1" aria-labelledby="shareModalLabel{{ run.id }}" aria-hidden="true">
-        <div class="modal-dialog">
-          <form action="{{ url_for('main.share_result',run_id=run.id) }}" method="POST" class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="shareModalLabel{{ run.id }}">Share Result</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <label for="recipient_username" class="form-label">Recipient Username:</label>
-              <input type="text" id="recipient_username" name="recipient_username" class="form-control" autocomplete="off" required>
-              <div id="username-suggestions" class="list-group"></div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Share</button>
-            </div>
-          </form>
+        <!-- Share Modal -->
+        <div class="modal fade" id="shareModal{{ run.id }}" tabindex="-1" aria-labelledby="shareModalLabel{{ run.id }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="{{ url_for('main.share_result',run_id=run.id) }}" method="POST" class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel{{ run.id }}">Share Result</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- amend btn-close to btn-close-white -->
+              </div>
+              <div class="modal-body">
+                <label for="recipient_username" class="form-label">Recipient Username:</label>
+                <input type="text" id="recipient_username" name="recipient_username" class="form-control" autocomplete="off" required>
+                <div id="username-suggestions" class="list-group"></div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-light">Share</button>
+                <!-- amend btn-success to btn-light -->
+              </div>
+            </form>
+          </div>
+
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock %}

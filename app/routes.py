@@ -258,14 +258,19 @@ def select_model():
             has_header=int(has_header)
         ))
 
-    return render_template('select_model.html', form=form,file_list=file_list)
+    return render_template('select_model.html',
+                           heading='Select Model Parameters', 
+                           form=form,
+                           file_list=file_list)
 
 @main.route('/results', methods=['GET'])
 @login_required
 def results():
     user_id = current_user.id
     results = ModelRun.query.filter_by(user_id=user_id).order_by(ModelRun.created_at.desc()).all()
-    return render_template('results.html', results=results)
+    return render_template('results.html',
+                           heading='Your Model Insights',
+                           results=results)
 
 @main.route('/share_result/<int:run_id>', methods=['POST'])
 @login_required
@@ -330,7 +335,9 @@ def shared_with_me():
         except:
             item.parsed_metrics = {}
 
-    return render_template('shared_results.html', shared_items=shared_items)
+    return render_template('shared_results.html',
+                            heading='Shared with You',
+                            shared_items=shared_items)
     
 
 @main.route('/username_autocomplete')
