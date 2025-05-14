@@ -1,12 +1,7 @@
 import os
 
 import openai
-import json
-import pandas as pd
-# The following three lines are used for loading api key from local file system
-from dotenv import load_dotenv, find_dotenv
-load_dotenv()  # load from .env
-openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 def validate_keychain():
     import os
@@ -29,11 +24,7 @@ def validate_keychain():
             "❌  The key is set but was rejected (wrong key or expired token)."
         ) from e
 
-def say_hello_gpt4_1():
-    """
-    Sends a 'Hello' message to the GPT-4.1 model using openai-python ≥1.0.0
-    and prints the assistant's reply to the terminal.
-    """
+def say_hello2model(model_name="gpt-4.1-mini-2025-04-14"):
     client = openai.OpenAI(
         api_key=os.getenv("OPENAI_API_KEY")  # correct instantiation  [oai_citation:14‡Stack Overflow](https://stackoverflow.com/questions/77505030/openai-api-error-you-tried-to-access-openai-chatcompletion-but-this-is-no-lon?utm_source=chatgpt.com)
     )
