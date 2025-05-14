@@ -13,7 +13,7 @@ from app import db
 from app.forms import SelectModelForm
 from app.models import ModelRun, SharedResult, UploadedData, User
 from app.static.ml_model.DataWashing import DataWashing
-from app.static.ml_model.gptassistant import GPT_column_suggestion
+from app.static.ml_model.GPTassistant import select_label_columns
 from app.static.ml_model.K_means import kmeans_function
 from app.static.ml_model.LinearRegression import LinearRegressionTraining
 from app.static.ml_model.SVM_classifier import SVMClassifier
@@ -133,15 +133,16 @@ def upload():
         df = pd.read_csv(filepath)
 
         # Slice the dataset and prepare JSON
-        data_slice = df.head(10).values.tolist()  # Only send top 10 rows to GPT
+          # Only send top 10 rows to GPT
         gpt_input = {
-            "data": data_slice,
+            "data": df,
             "label_column": -1  # Dummy label column, GPT will analyze all
         }
 
         # Use your GPT_column_suggestion function
-        suggested_target_col = GPT_column_suggestion(json.dumps(gpt_input))
-
+        # suggested_target_col = GPT_column_suggestion(json.dumps(gpt_input))
+        # Remember to alter the following line after testing
+        suggested_target_col = 1
 
         # Get file stats
         file_stats = os.stat(filepath)
@@ -160,7 +161,10 @@ def upload():
         db.session.commit()
         flash(f"Upload successful: {filename}", "success")
         flash(f"Model Used: {suggested_target_col}", "info")
-        return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename ))
+        reg_idx, cls_idx = select_label_columns(df.head(20))
+        # flash(f"Regression label column: {reg_idx}")
+        # flash(f"Classification label column: {cls_idx}")
+        return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename, reg_idx=reg_idx, cls_idx=cls_idx))
 
     return render_template(
         'upload.html',

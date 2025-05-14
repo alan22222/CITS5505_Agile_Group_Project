@@ -3,9 +3,21 @@
 
 {% block content %}
 
-<div class="container mt-5">
   <div class="container mt-4">
     <h1 class="text-center mb-4">{{ heading }}</h1>   <!-- amend from <h2>Select Model Parameters</h2> to pass value in routes.py-->
+
+        <!-- New block for reg_idx and cls_idx -->
+    {% if request.args.get('reg_idx') or request.args.get('cls_idx') %}
+      <div class="alert alert-info text-center">
+        {% if request.args.get('reg_idx') %}
+          <p><strong>Regression Label Column Index:</strong> {{ request.args.get('reg_idx') }}</p>
+        {% endif %}
+        {% if request.args.get('cls_idx') %}
+          <p><strong>Classification Label Column Index:</strong> {{ request.args.get('cls_idx') }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
     <form method="POST">
       {{ form.hidden_tag() }}
 
@@ -18,6 +30,7 @@
             <option value="{{ file }}">{{ file }}</option>
           {% endfor %}
         </select>
+
       </div>
       
       <div class="mb-3">
