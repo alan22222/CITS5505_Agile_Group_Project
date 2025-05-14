@@ -13,7 +13,7 @@ from app import db
 from app.forms import SelectModelForm
 from app.models import ModelRun, SharedResult, UploadedData, User
 from app.static.ml_model.DataWashing import DataWashing
-from app.static.ml_model.gptassistant import GPT_column_suggestion
+from app.static.ml_model.GPTassistant import GPT_column_suggestion
 from app.static.ml_model.K_means import kmeans_function
 from app.static.ml_model.LinearRegression import LinearRegressionTraining
 from app.static.ml_model.SVM_classifier import SVMClassifier
@@ -75,9 +75,11 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
+            print(f"✅ Login success for {username}")
             login_user(user)
             return redirect(url_for('main.dashboard', user_id=user.id))
         else:
+            print(f"❌ Login failed for {username}")
             flash("Invalid credentials.")
             return redirect(url_for('main.login'))
 
@@ -159,7 +161,7 @@ def upload():
         db.session.add(uploaded_data)
         db.session.commit()
         flash(f"Upload successful: {filename}", "success")
-        flash(f"Model Used: {suggested_target_col}", "info")
+        flash(f"Suggested target index from AI: {suggested_target_col}", "info")
         return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename ))
 
     return render_template(
