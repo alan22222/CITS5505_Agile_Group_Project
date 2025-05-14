@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block title %}Select Model{% endblock %}
+
+{% block content %}
+
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">{{ heading }}</h1>   <!-- amend from <h2>Select Model Parameters</h2> to pass value in routes.py-->
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      
+      <div class="mb-3">
+        <label for="file_select" class="form-label">Select File</label>
+        <select name="file_select" id="file_select" class="form-select" required>
+          <option value="" disabled selected>Choose a CSV file</option>
+          {% for file in file_list %}
+            <option value="{{ file }}">{{ file }}</option>
+          {% endfor %}
+        </select>
+
+      </div>
+      
+      <div class="mb-3">
+        {{ form.model_type.label(class="form-label") }}
+        {{ form.model_type(class="form-select") }}
+      </div>
+
+      <div class="mb-3">
+        {{ form.precision_mode.label(class="form-label") }}
+        {{ form.precision_mode(class="form-select") }}
+      </div>
+
+      <div class="mb-3">
+        {{ form.target_index.label(class="form-label") }}
+        {{ form.target_index(class="form-control", placeholder=form.target_index.description) }}
+      </div>
+
+      <div class="form-check mb-3">
+        {{ form.has_header(class="form-check-input") }}
+        {{ form.has_header.label(class="form-check-label") }}
+      </div>
+
+      <!-- amended the {{ form.submit(class="btn btn-primary") }} with the below to add the icon -->
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-robot me-2"></i> {{ form.submit.label.text }}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
