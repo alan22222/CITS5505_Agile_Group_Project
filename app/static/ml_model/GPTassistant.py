@@ -1,5 +1,28 @@
 import os
 import openai
+
+
+def validate_keychain():
+    import os
+    import openai
+
+    # 1 – Make sure the variable is populated
+    key = os.getenv("OPENAI_API_KEY")      # or whatever var name you used
+    if not key:
+        raise RuntimeError("OPENAI_API_KEY is not set in your environment")
+
+    openai.api_key = key                  # or openai.api_key = "sk-..."
+
+    # 2 – Ping a lightweight endpoint to confirm the key works
+    try:
+        # list available models is the cheapest “health check”
+        _ = openai.models.list()
+        print("✅  OpenAI API key is set correctly and accepted by the server.")
+    except openai.AuthenticationError as e:
+        raise RuntimeError(
+            "❌  The key is set but was rejected (wrong key or expired token)."
+        ) from e
+
 def say_hello2model(model_name="gpt-4.1-mini-2025-04-14"):
     client = openai.OpenAI(
     api_key="SECRET-KEY"
