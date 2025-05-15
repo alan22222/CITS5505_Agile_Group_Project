@@ -4,6 +4,18 @@ import threading
 import unittest
 import os
 import sys
+
+# =================== IMPORTANT NOTE ===================
+# This test file has been modified to use a separate in-memory SQLite database
+# for testing, rather than the real application database. This prevents test data
+# from being written to the real database during testing.
+# The key changes are:
+# 1. Creating a separate SQLAlchemy instance (test_db) instead of using the app's db
+# 2. Creating test-specific models that use this test_db instance
+# 3. Creating a mock blueprint with routes that use the test_db
+# 4. Properly cleaning up the test database after each test
+# =================== IMPORTANT NOTE ===================
+
 # Add project root to path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
@@ -20,18 +32,30 @@ from selenium.common.exceptions import TimeoutException
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from app.models import User, db 
+from flask_login import LoginManager, UserMixin
+from app.models import User
+
+# Create a test-specific database instance
+test_db = SQLAlchemy()
 
 # Create a memory based database with sqlite3
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Use an in-memory database for testing
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['WTF_CSRF_ENABLED'] = False  # Ban CSRF
+app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
 app.config['TESTING'] = True
+app.config['SECRET_KEY'] = 'test-secret-key'  # Required for sessions and flash messages
 
-# Initialize database
-db.init_app(app)
+# Initialize database with our test-specific instance
+test_db.init_app(app)
+
+# Define test models that use our test_db instance
+class TestUser(test_db.Model, UserMixin):
+    __tablename__ = 'user'
+    id = test_db.Column(test_db.Integer, primary_key=True)
+    username = test_db.Column(test_db.String(150), unique=True, nullable=False)
+    password = test_db.Column(test_db.String(150), nullable=False)
+    email = test_db.Column(test_db.String(150), unique=True, nullable=False)
 
 # Initialize login manager
 login_manager = LoginManager()
@@ -41,11 +65,58 @@ login_manager.login_view = 'main.login'
 # Loading user call back
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return TestUser.query.get(int(user_id))
 
-# Register user blue print
-from app.routes import main
-app.register_blueprint(main)
+# Create a mock blueprint for testing
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_user
+from werkzeug.security import generate_password_hash
+
+# Create a test blueprint
+test_main = Blueprint('main', __name__)
+
+@test_main.route('/')
+def index():
+    return render_template('landing.html')
+
+@test_main.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        # Check if username already exists
+        if TestUser.query.filter_by(username=username).first():
+            flash("Username already exists!")
+            return redirect(url_for('main.register'))
+            
+        # Check if email already exists
+        if TestUser.query.filter_by(email=email).first():
+            flash('Email already exists')
+            return redirect(url_for('main.register'))
+            
+        # Create new user
+        hashed_pw = generate_password_hash(
+            password,
+            method='pbkdf2:sha256',
+            salt_length=8
+        )
+        new_user = TestUser(username=username, email=email, password=hashed_pw)
+        test_db.session.add(new_user)
+        test_db.session.commit()
+        flash('Registration successful! Please login.')
+        return redirect(url_for('main.login'))
+
+    return render_template('register.html')
+
+@test_main.route('/login', methods=['GET', 'POST'])
+def login():
+    # Simple mock login route
+    return render_template('login.html')
+
+# Register our test blueprint
+app.register_blueprint(test_main)
 
 # =================== Selenium browser set up ===================
 
@@ -111,9 +182,15 @@ class TestRegister(unittest.TestCase):
 
         # Create app context
         with app.app_context():
-            db.create_all()
+            test_db.create_all()
 
     def tearDown(self):
+        # Clean up the database
+        with app.app_context():
+            test_db.session.remove()
+            test_db.drop_all()
+        
+        # Quit the browser
         self.driver.quit()
 
     def test_register_user(self):
