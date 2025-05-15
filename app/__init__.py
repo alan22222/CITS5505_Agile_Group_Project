@@ -37,12 +37,8 @@ login_manager = LoginManager()
 #     return app
 
 def create_app(config_class=None):
-
-    load_dotenv()
-    
     app = Flask(__name__)
-    # 从 .env 文件中获取 SECRET_KEY，并覆盖配置中的值
-    secret_key = os.environ.get('SECRET_KEY')
+    
     # Load test config if passed in, otherwise default to 'config.Config'
     if config_class is None:
         app.config.from_object('config.Config')
@@ -50,9 +46,7 @@ def create_app(config_class=None):
         app.config.from_object(config_class)
 
     # You can still override this below if needed
-    # Yanchen: I am trying to modify this in order to retrieve key from .env file, thus I need to comment the following line
-    # app.config['SECRET_KEY'] = app.config.get('SECRET_KEY', 'devkey')
-    app.config['SECRET_KEY'] = secret_key
+    app.config['SECRET_KEY'] = app.config.get('SECRET_KEY', 'devkey')
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///database.db')
 
     db.init_app(app)
@@ -62,6 +56,7 @@ def create_app(config_class=None):
     login_manager.login_view = 'main.login'
 
     from app.models import User  # Avoid circular import
+    from app.models import User  # Avoid circular import
     from app.routes import main
     app.register_blueprint(main)
 
@@ -70,5 +65,7 @@ def create_app(config_class=None):
         return User.query.get(int(user_id))
 
     return app
+
+    
 
     
