@@ -2,6 +2,10 @@
 {% block title %}Shared With Me{% endblock %}
 
 {% block content %}
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sharedresults.css') }}">
+
 <div class="container mt-5">
   <div class="container mt-4">
     <h1 class="text-center mb-4">{{ heading }}</h1> <!-- amend from <h2>Results Shared With You</h2> to pass value in routes.py-->
@@ -10,12 +14,15 @@
       <div class="card-body">
         <h5 class="card-title">
           {{ item.modelrun.model_type | title }}
-          <br><small class="text-muted">Shared by: {{ item.sender.username }}</small>
+          <br><small class="text-muted">From: {{ item.sender.username }}</small>
         </h5>
-        <p class="card-text"><strong>Shared on:</strong> {{ item.shared_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p class="card-text">Shared on {{ item.shared_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <!-- removed <strong> for this text -->
         <ul>
           {% for key, value in item.parsed_metrics.items() %}
-            <li><strong>{{ key | replace("_", " ") | title }}:</strong> {{ value }}</li>
+            <!-- <li>{{ key | replace("_", " ") | title }}: {{ value }}</li> -->
+            <!-- removed <strong> for this list item, add the metric-key class -->
+            <li> <span class="metric-key">{{ key | replace("_", " ") | title }}:</span> {{ value }}</li>
           {% endfor %}
 
         </ul>

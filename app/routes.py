@@ -160,7 +160,7 @@ def upload():
         )
         db.session.add(uploaded_data)
         db.session.commit()
-        flash(f"Upload successful: {filename}", "success")
+        flash(f" {filename} upload success", "success")
         flash(f"Suggested target index from AI: {suggested_target_col}", "info")
         return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename ))
 
@@ -184,7 +184,7 @@ def delete_file(file_id):
 
     db.session.delete(dataset)
     db.session.commit()
-    flash(f"File '{dataset.filename}' deleted.", "success")
+    flash(f"File '{dataset.filename}' has been deleted.", "success")
     return redirect(url_for('main.dashboard', user_id=current_user.id))
 
 
@@ -244,7 +244,7 @@ def select_model():
             )
             db.session.add(model_run)
             db.session.commit()
-            flash("Model execution Success: " + str(result))
+            flash("Model execution success: " + str(result))
             return redirect(url_for('main.results'))
 
         else:
@@ -312,7 +312,7 @@ def share_result(run_id):
 def view_result(run_id):
     run = ModelRun.query.get_or_404(run_id)
     if run.user_id != current_user.id:
-        flash('retrieved')
+        flash('The result is as below.')
 
     # Optionally parse JSON
     import json
