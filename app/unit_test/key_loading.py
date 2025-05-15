@@ -2,15 +2,14 @@ import unittest
 from flask import Flask, session
 import sys
 import os
-# 获取项目根目录的上一级目录（确保 app 成为可导入模块）
+# Try to import app moudle
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-from app import create_app  # 现在应该可以正常导入了
+from app import create_app  # This is very important, other wise the whole test function would not work
 
 
 class TestConfig:
-    """测试专用配置类"""
     TESTING = True
     SECRET_KEY = 'test-secret-key-for-session'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
@@ -63,7 +62,7 @@ class TestSessionEncryption(unittest.TestCase):
             print("Session cookie in headers:", cookie)
 
     def test_session_persists_and_decodes(self):
-        """测试 session 是否能持久化并正确解码"""
+        """Test whether session can decode permantly"""
         with self.client as c:
             # Set up session key
             with c.session_transaction() as sess:
