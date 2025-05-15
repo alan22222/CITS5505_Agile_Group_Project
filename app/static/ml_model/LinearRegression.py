@@ -1,6 +1,7 @@
 import os
 import uuid
 
+from flask import Flask
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -138,3 +139,16 @@ def LinearRegressionTraining(clean_data, label_column, type):
         print(error_message)
         result = error_message
         return result, False
+
+if __name__ == "__main__":
+    np.random.seed(42)
+    test_data = pd.DataFrame({
+            'feature1': np.random.rand(100),
+            'feature2': np.random.rand(100),
+            'target': np.random.rand(100)
+        })
+    app = Flask(__name__)
+    with app.app_context():
+        result, flag = LinearRegressionTraining(clean_data=test_data, label_column=1, type="Fast")
+        print(flag)
+        print(result)

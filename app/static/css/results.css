@@ -1,134 +1,19 @@
-  /* Styles for "Recipient Username:" label */
-  .modal-body .form-label {
-    font-weight: 600;
-    color: var(--dark-color);
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  /* Styles for "modal-header" */
-  .modal-header {
-    background-color: rgba(30, 30, 47, 1);
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    padding: 1rem;
-    color: white;
-  }
-
-  .modal-header .modal-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  /* Updated card styles for a cleaner look */
-  .card {
-    border-radius: 10px;
+.card {
+    border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: var(--light-color); /* Light background */
-    border: 2px solid #e0e0e0; /* Subtle border for structure */
-    width: 18rem;
+    transition: transform 0.3s ease;
   }
-
   .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.03);
+  }
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  .card-body pre {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
   }
   
-  .card-body {
-    padding: 1.5rem;
-    /* padding: 15px; */
-  }
-
-  .card-img-top {
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid var(--dark-color);
-
-  }
-
-  .card-body h6 {
-    font-size: 1.2rem;
-    font-style: bold;
-    font-weight: 600;
-    color: var(--primary-color); /* Tech-inspired accent color */
-  }
-  .card-body p {
-    font-size: 0.8rem;
-  }
-
-
-
-  /* Cards are used not only this page, therefore put the responsive style here */
-/* Responsive styles for smaller screens */
-@media (max-width: 768px) {
-  .modal-body .form-label {
-      font-size: 0.8rem; /* Reduce font size */
-  }
-
-  .modal-header {
-      padding: 0.75rem; /* Reduce padding */
-  }
-
-  .modal-header .modal-title {
-      font-size: 1rem; /* Reduce title size */
-  }
-
-  .card {
-      border-radius: 8px; /* Slightly smaller border radius */
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Lighter shadow */
-  }
-
-  .card-img-top {
-      height: 150px; /* Reduce image height */
-  }
-
-  .card-body {
-      padding: 10px; /* Reduce padding */
-  }
-
-  .card-body h6 {
-      font-size: 1rem; /* Reduce heading size */
-  }
-
-  .card-body p {
-      font-size: 0.7rem; /* Reduce paragraph size */
-  }
-}
-
-/* Extra small screens (mobile) */
-@media (max-width: 576px) {
-  .modal-body .form-label {
-      font-size: 0.75rem; /* Further reduce font size */
-  }
-
-  .modal-header {
-      padding: 0.5rem; /* Further reduce padding */
-  }
-
-  .modal-header .modal-title {
-      font-size: 0.9rem; /* Further reduce title size */
-  }
-
-  .card {
-      border-radius: 6px; /* Smaller border radius */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
-      width: 100%;
-  }
-
-  .card-img-top {
-      height: 100px; /* Further reduce image height */
-  }
-
-  .card-body {
-      padding: 8px; /* Further reduce padding */
-  }
-
-  .card-body h6 {
-      font-size: 0.8rem; /* Further reduce heading size */
-  }
-
-  .card-body p {
-      font-size: 0.6rem; /* Further reduce paragraph size */
-  }
-}

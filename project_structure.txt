@@ -1,0 +1,229 @@
+.
+├── __pycache__
+│   ├── config.cpython-312.pyc
+│   └── testing.cpython-312.pyc
+├── .DS_Store
+├── .env
+├── .git
+│   ├── .DS_Store
+│   ├── AUTO_MERGE
+│   ├── COMMIT_EDITMSG
+│   ├── config
+│   ├── description
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   ├── BothGPTassistant
+│   │       │   ├── CleanBranchWithoutKey
+│   │       │   ├── GPTassistantWithoutKey
+│   │       │   ├── login_test
+│   │       │   ├── main
+│   │       │   ├── selenium_test
+│   │       │   └── wizzardG7777777-GPTassistant-added
+│   │       └── remotes
+│   │           └── origin
+│   │               ├── CleanBranchWithoutKey
+│   │               ├── feature
+│   │               │   ├── authenticationuploading
+│   │               │   ├── BothGPTassistant
+│   │               │   │   └── WizzardG7777777
+│   │               │   ├── overallstyling
+│   │               │   ├── styling_sTesting
+│   │               │   └── testing
+│   │               ├── feature-dashboard
+│   │               ├── gpt-feature
+│   │               ├── main
+│   │               ├── origin
+│   │               │   └── feature
+│   │               │       └── BothGPTassistant
+│   │               │           └── WizzardG7777777
+│   │               ├── Pixy-greenhand-patch-1
+│   │               ├── test
+│   │               ├── WebApp_AnalysationUploaded
+│   │               ├── wizzardG7777777-GPTassistant-added
+│   │               └── YanchenIsTesting
+│   ├── ORIG_HEAD
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       │   ├── BothGPTassistant
+│       │   ├── CleanBranchWithoutKey
+│       │   ├── GPTassistantWithoutKey
+│       │   ├── login_test
+│       │   ├── main
+│       │   ├── selenium_test
+│       │   └── wizzardG7777777-GPTassistant-added
+│       ├── remotes
+│       │   └── origin
+│       │       ├── CleanBranchWithoutKey
+│       │       ├── feature
+│       │       │   ├── authenticationuploading
+│       │       │   ├── BothGPTassistant
+│       │       │   │   └── WizzardG7777777
+│       │       │   ├── overallstyling
+│       │       │   ├── styling_sTesting
+│       │       │   └── testing
+│       │       ├── feature-dashboard
+│       │       ├── gpt-feature
+│       │       ├── main
+│       │       ├── origin
+│       │       │   └── feature
+│       │       │       └── BothGPTassistant
+│       │       │           └── WizzardG7777777
+│       │       ├── Pixy-greenhand-patch-1
+│       │       ├── test
+│       │       ├── WebApp_AnalysationUploaded
+│       │       ├── wizzardG7777777-GPTassistant-added
+│       │       └── YanchenIsTesting
+│       └── tags
+├── .gitignore
+├── app
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── forms.cpython-312.pyc
+│   │   ├── models.cpython-312.pyc
+│   │   ├── routes.cpython-312.pyc
+│   │   └── routes.cpython-313.pyc
+│   ├── .DS_Store
+│   ├── forms.py
+│   ├── models.py
+│   ├── plotting
+│   │   └── 14a16b1e-2a0e-408d-bb0a-b43de2dea236.png
+│   ├── routes.py
+│   ├── selenium_test
+│   │   └── test1.py
+│   ├── static
+│   │   ├── .DS_Store
+│   │   ├── css
+│   │   │   ├── dashboard.css
+│   │   │   ├── login-reg.css
+│   │   │   ├── results.css
+│   │   │   ├── sharedresults.css
+│   │   │   ├── style.css
+│   │   │   ├── upload.css
+│   │   │   └── viewresult.css
+│   │   ├── images
+│   │   │   └── hero.png
+│   │   ├── js
+│   │   │   ├── dashboard.js
+│   │   │   ├── main.js
+│   │   │   ├── upload.html
+│   │   │   └── upload.js
+│   │   ├── ml_model
+│   │   │   ├── __pycache__
+│   │   │   │   ├── DataWashing.cpython-312.pyc
+│   │   │   │   ├── GPTassistant.cpython-312.pyc
+│   │   │   │   ├── K_means.cpython-312.pyc
+│   │   │   │   ├── LinearRegression.cpython-312.pyc
+│   │   │   │   └── SVM_classifier.cpython-312.pyc
+│   │   │   ├── DataWashing.py
+│   │   │   ├── GPT_result_analysation.py
+│   │   │   ├── GPTassistant.py
+│   │   │   ├── K_means.py
+│   │   │   ├── LinearRegression.py
+│   │   │   ├── static
+│   │   │   │   └── plotting
+│   │   │   │       ├── 3c286651-9d3d-4f16-aba5-164d1d9e8a24.png
+│   │   │   │       ├── 75b3a47a-4b19-4c84-99c3-61df11960c31.png
+│   │   │   │       ├── 8ec72ac2-6d05-4f2c-b5bb-3e7865b3e897.png
+│   │   │   │       └── fe23bd68-7e4d-44f6-9e6b-da76ab7ddf92.png
+│   │   │   └── SVM_classifier.py
+│   │   └── plotting
+│   │       ├── 294778a0-4465-40ef-805d-50009d434de1.png
+│   │       ├── 4a55dccf-3b30-40d9-a712-1c1ffff6fe2b.png
+│   │       ├── 618f58e6-a4a6-4aa3-9fad-b9058d6d35db.png
+│   │       ├── 84c2c059-a50f-4919-94d0-0257dabfeb77.png
+│   │       └── kmeans_radar_12-38-33_07-05-2025.png
+│   ├── templates
+│   │   ├── dashboard.html
+│   │   ├── index.html
+│   │   ├── landing.html
+│   │   ├── layout.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   ├── results.html
+│   │   ├── select_model_backup.html
+│   │   ├── select_model.html
+│   │   ├── shared_results.html
+│   │   ├── upload.html
+│   │   └── view.html
+│   ├── test_json
+│   │   ├── Kmeans1.json
+│   │   ├── Linear1.json
+│   │   ├── Linear2.json
+│   │   └── SVM1.json
+│   └── unit_test
+│       ├── DataWashing_test.py
+│       ├── K_means_test.py
+│       ├── key_loading.py
+│       ├── LinearRegression_test.py
+│       ├── login_test.py
+│       ├── routes_test.py
+│       ├── static
+│       │   └── plotting
+│       │       ├── 0a4279b4-0ec8-4e4a-b2ba-6b8888329915.png
+│       │       ├── 12345678-1234-5678-1234-567812345678.png
+│       │       ├── 2e8d47e7-ffcf-4a01-a650-a4d2d159e4fe.png
+│       │       ├── c680c2c2-a108-48d2-9f50-ba0e5cef0235.png
+│       │       └── d6107c6a-ed7d-42ca-9934-0d0550e91ee0.png
+│       └── SVM_test.py
+├── config.py
+├── data
+│   └── uploads
+│       ├── 1
+│       │   ├── data.csv
+│       │   ├── LGA_count_of_dwellings.csv
+│       │   └── top_100_rules.csv
+│       └── 2
+│           └── cleaned_dataset.csv
+├── instance
+│   └── database.db
+├── migrations
+│   ├── __pycache__
+│   │   └── env.cpython-39.pyc
+│   ├── .DS_Store
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions
+│       ├── __pycache__
+│       │   ├── 9a55ded658ec_add_uploadeddata_modelrun_sharedresult_.cpython-39.pyc
+│       │   └── eea7f9f2c8d6_initial_migration_with_user_model_only.cpython-39.pyc
+│       ├── 9a55ded658ec_add_uploadeddata_modelrun_sharedresult_.py
+│       └── eea7f9f2c8d6_initial_migration_with_user_model_only.py
+├── project_structure.txt
+├── README.md
+├── requirements.txt
+├── run.py
+├── testing.py
+└── tests
+    ├── classifier_data.csv
+    ├── cluster_data.csv
+    ├── Kmeans_data_generator.py
+    ├── regression_data.csv
+    └── selenium_test.py
+
+293 directories, 837 files
