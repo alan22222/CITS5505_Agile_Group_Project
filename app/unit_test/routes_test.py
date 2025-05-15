@@ -17,8 +17,9 @@ from app.models import db, User, UploadedData
 class RoutesTestCase(unittest.TestCase):
     def setUp(self):
         """Set up test environment before each test."""
-        # 使用测试配置创建 Flask 应用
-        self.app = create_app('testing')  # 确保 app.config['SQLALCHEMY_DATABASE_URI'] 是内存数据库
+        # Using test config for our unit test
+        self.app = create_app('testing')  
+        # Make sure we are using memory database rather than the real one
         self.app.config['WTF_CSRF_ENABLED'] = False
         self.app.config['UPLOAD_FOLDER'] = tempfile.mkdtemp()
         self.client = self.app.test_client()
@@ -44,7 +45,6 @@ class RoutesTestCase(unittest.TestCase):
             db.drop_all()
         shutil.rmtree(self.app.config['UPLOAD_FOLDER'], ignore_errors=True)
 
-    # ========== 测试用例 ==========
 
     def test_index_route(self):
         response = self.client.get('/')
@@ -73,7 +73,7 @@ class RoutesTestCase(unittest.TestCase):
             username='testuser_Yanchen',
             password='hashed_secret_password'
         ), follow_redirects=True)
-        self.assertIn(b'Welcome', response.data)  # 请根据实际登录成功页面内容调整
+        self.assertIn(b'Welcome', response.data)  
 
     def test_dashboard_route_authenticated(self):
         self.login_user()
