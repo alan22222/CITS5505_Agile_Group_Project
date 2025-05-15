@@ -75,9 +75,11 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
+            print(f"✅ Login success for {username}")
             login_user(user)
             return redirect(url_for('main.dashboard', user_id=user.id))
         else:
+            print(f"❌ Login failed for {username}")
             flash("Invalid credentials.")
             return redirect(url_for('main.login'))
 
