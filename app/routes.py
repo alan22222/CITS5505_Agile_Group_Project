@@ -13,7 +13,7 @@ from app import db
 from app.forms import SelectModelForm
 from app.models import ModelRun, SharedResult, UploadedData, User
 from app.static.ml_model.DataWashing import DataWashing
-from app.static.ml_model.gptassistant import GPT_column_suggestion
+from app.static.ml_model.GPTassistant import GPT_column_suggestion
 from app.static.ml_model.K_means import kmeans_function
 from app.static.ml_model.LinearRegression import LinearRegressionTraining
 from app.static.ml_model.SVM_classifier import SVMClassifier
