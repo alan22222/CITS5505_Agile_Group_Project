@@ -1,8 +1,12 @@
 # 🚀 CITS5505_Agile_Group_Project - OneClickML
 
 ## 👥 Contribution
+# 🚀 CITS5505_Agile_Group_Project - OneClickML
+
+## 👥 Contribution
 
 Members of Group 39:
+
 
 | **UWA ID** | **Name**       | **GitHub Username(s)**       |
 |------------|----------------|------------------------------|
@@ -10,7 +14,12 @@ Members of Group 39:
 | 24239318   | Ayden Pan      | Pixy-greenhand               |
 | 24302286   | Yee Man Tsai   | ym-Tsai                      |
 | 24256987   | Yanchen Yu     | wizardG7777777, Yanchen Yu   |
+| 24085576   | Alan Chacko    | alan22222                    |
+| 24239318   | Ayden Pan      | Pixy-greenhand               |
+| 24302286   | Yee Man Tsai   | ym-Tsai                      |
+| 24256987   | Yanchen Yu     | wizardG7777777, Yanchen Yu   |
 
+---
 ---
 
 ## 🎯 Purpose, Design, and Use of OneClickML
@@ -35,45 +44,26 @@ OneClickML is a smart, streamlined data analysis platform that empowers users to
 
 OneClickML is developed using **Flask** and **SQLAlchemy**, and is written in **Python 3.10**.
 
-### Folder Setup Steps:
-1. Unzip the folder
-2. Locate the unzipped file
-3. For Windows, use Powershell; For MacOS, use Terminal
+### 🔧 Setup Steps:
 
-
-### 🛠️ Initial Setup
-
-1. Clone this repository:
-```bash
-git clone https://github.com/alan22222/CITS5505_Agile_Group_Project.git
-cd <project-folder>
-```
-
-2. Ensure Python 3.10 is installed:
+1. Ensure Python 3.10 is installed:
 ```bash
 python3 --version
 ```
 
-### 🔧 Setup Steps:
-
-1. Create a virtual environment:
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 ```
 
-2. Activate the environment:
+3. Activate the environment:
 ```bash
 source venv/bin/activate
 ```
 
-3. Install dependencies:
+4. Install dependencies:
 ```bash
 pip install -r requirements.txt
-```
-
-4. Setup the local SQLite database (for the first time):
-```bash
-flask db upgrade
 ```
 
 5. Run the app:
@@ -81,22 +71,9 @@ flask db upgrade
 python run.py
 ```
 
-OR 
-
-5. Run the app:
-```bash
-flask run
-
-```
-
 After launching, you should see:
 ```
 * Running on http://127.0.0.1:5000
-```
-
-6. Use browser to open
-```
-http://127.0.0.1:5000
 ```
 
 ---
@@ -115,21 +92,29 @@ If it's above `3.10`, consider downgrading to Python 3.10.
 
 ---
 
-### 🛠️ Files suitable and parameters suggest to choose for each model
+### 🛠️ Common Commands
 
-| **Data File Name** | **Suitable Model**       | **Suggested Parameters** | **Has Header?** |
-|---------------------|--------------------------|---------------------------|------------------|
-| `data_10.csv`       | Linear Regression model | Fast, 1 (the index column)| Yes              |
-| `wdbc.csv`          | SVM model               | Fast, 1 (the index column)| Yes              |
-| `wdbc.csv`          | K-means model           | Fast, 1 (the index column)| Yes              |
+0. Install Flask manually (if needed):
+```bash
+pip install Flask
+```
 
-### 🔑 Accounts Prepared for Testing
+1. Clone this repository:
+```bash
+git clone <your-repo-link>
+cd <project-folder>
+```
 
-| **Account** | **Password** |
-|-------------|--------------|
-| test        | password     |
-| karen       | password     |
-| admin       | password     |
+2. Set up the database:
+```bash
+flask db migrate
+flask db upgrade
+```
+
+3. Start the Flask app:
+```bash
+flask run
+```
 
 ---
 
@@ -147,35 +132,24 @@ You can run unit tests directly from the terminal.
 ```bash
 cd app/unit_test
 ```
-For Windows:
-```bash
-cd .\app
-cd .\unit_test 
-```
 
 3. List available test files:
 ```bash
 ls
 ```
 
-4. Run a test file (e.g., `LinearRegression_test.py`):
+4. Run a test file (e.g., `LinearRegressionTest.py`):
 ```bash
-python3 ./LinearRegression_test.py
-```
-For Windows:
-```bash
-python .\LinearRegression_test.py
+python3 ./LinearRegressionTest.py
 ```
 
-5. Expected output when tests pass (Example):
+5. Expected output when tests pass:
 ```
 Ran 3 tests in 0.002s
 OK
 ```
 
 ✅ This means all tests in the file executed and passed successfully.
-
-
 
 ---
 
@@ -194,21 +168,12 @@ pip install selenium flask
 ```bash
 brew install chromedriver
 ```
-For Windows:
-```bash
-pip install webdriver-manager
-```
 
-3. Add your project root to `PYTHONPATH` (for macOS):
+3. Add your project root to `PYTHONPATH`:
 ```bash
 export PYTHONPATH=$PWD
 ```
-💡 This tells Python to treat the current directory as a top-level package.
-
-For Windows:
-```bash
-cd .\tests
-```
+💡 This tells Python to treat the current directory as a top-level package, allowing `from app import create_app` to work.
 
 4. Activate your virtual environment:
 ```bash
