@@ -1,6 +1,7 @@
 /* This CSS file contains mostly general elements, and responsive styles of all elements */
 /* Base */
 /* root defines color that are shared by most of the pages */
+/* root defines color that are shared by most of the pages */
 :root {
     --primary-color: rgb(65, 105, 225);
     --secondary-color: rgb(108, 117, 125);
@@ -189,7 +190,7 @@ form {
     padding: 15px;
     border-radius: 5px;
     font-weight: bold;
-    animation: flashMessage 6s ease-out;
+    animation: flashMessage 5s ease-out;
     /* make the noti longer */
     display: block; /* Ensure the alert is shown initially */
 }
@@ -275,6 +276,26 @@ form {
 
 .btn-danger {
     background-color: var(--dark-color);
+}
+
+/* for Flash message keyframes */
+@keyframes flashMessage {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    25% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    75% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 }
 
 /* for Flash message keyframes */
@@ -537,4 +558,5 @@ form {
 :focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
+}
 }
