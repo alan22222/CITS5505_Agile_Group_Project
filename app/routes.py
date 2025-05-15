@@ -353,3 +353,12 @@ def username_autocomplete():
     results = User.query.filter(User.username.ilike(f"%{query}%")).filter(User.id != current_user.id).limit(5).all()
     usernames = [user.username for user in results]
     return jsonify(usernames=usernames)
+
+@main.route('/shutdown')
+def shutdown():
+    """Route to shutdown the server - used for testing only."""
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return 'Server shutting down...'
