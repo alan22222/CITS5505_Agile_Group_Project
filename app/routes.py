@@ -188,7 +188,7 @@ def delete_file(file_id):
 
     db.session.delete(dataset)
     db.session.commit()
-    flash(f"File '{dataset.filename}' deleted.", "success")
+    flash(f"File '{dataset.filename}' has been deleted.", "success")
     return redirect(url_for('main.dashboard', user_id=current_user.id))
 
 
@@ -248,7 +248,7 @@ def select_model():
             )
             db.session.add(model_run)
             db.session.commit()
-            flash("Model execution Success: " + str(result))
+            flash("Model execution success: " + str(result))
             return redirect(url_for('main.results'))
 
         else:
@@ -316,7 +316,7 @@ def share_result(run_id):
 def view_result(run_id):
     run = ModelRun.query.get_or_404(run_id)
     if run.user_id != current_user.id:
-        flash('retrieved')
+        flash('The result is as below.')
 
     # Optionally parse JSON
     import json

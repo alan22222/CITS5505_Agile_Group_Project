@@ -1,0 +1,73 @@
+/* === Shared Result Card Styling === */
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* special styling for hover effect of the share card */
+.card:hover {
+    transform: scale(1.05); 
+    background-color: var(--light-color);
+    box-shadow: 0 1rem 1.8rem rgba(0, 0, 0, 0.15); /* Slightly larger shadow for emphasis */
+    transition: transform 0.3s ease, background-color 0.2s ease; /* Smooth transition */
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--success-color);
+    letter-spacing: 0.5px;
+}
+
+.card-title small {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.card-text {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+}
+
+.card ul {
+    padding-left: 0;
+    margin-bottom: 1rem;
+    list-style: none; /* remove bullet point */
+}
+
+.card ul li {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    color: var(--dark-color);
+}
+
+.metric-key {
+    font-weight: 600; /* make the wordings semi-bold */
+    color: var(--secondary-color);
+    letter-spacing: 0.4px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+
+.btn-sm.btn-primary {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-sm.btn-primary:hover {
+    background-color: rgba(0, 86, 179, 1);
+    color: white;
+    transform: translateY(-1px);
+}
