@@ -50,6 +50,21 @@ class EndToEndTest(unittest.TestCase):
         cls.server_thread.join()
         if os.path.exists(cls.csv_path):
             os.remove(cls.csv_path)
+
+    #invalid login test
+    def test_0_invalid_login(self):
+        self.driver.get(f"{LOCAL_URL}/login")
+        self.driver.find_element(By.NAME, "username").send_keys("nonexistent_user")
+        self.driver.find_element(By.NAME, "password").send_keys("wrongpassword123")
+        time.sleep(3)
+        login_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+        self.driver.execute_script("arguments[0].click();", login_btn)
+
+        WebDriverWait(self.driver, 10).until(EC.url_contains("login"))
+        time.sleep(3)
+
+        self.assertIn("login", self.driver.current_url.lower())
+
           
     #register test
     def test_1_register(self):
@@ -60,6 +75,7 @@ class EndToEndTest(unittest.TestCase):
         register_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         self.driver.execute_script("arguments[0].click();", register_btn)
         WebDriverWait(self.driver, 10).until(EC.url_contains("login"))
+        time.sleep(3)
       
     #login test
     def test_2_login(self):
@@ -69,6 +85,7 @@ class EndToEndTest(unittest.TestCase):
         login_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         self.driver.execute_script("arguments[0].click();", login_btn)
         WebDriverWait(self.driver, 10).until(lambda d: "dashboard" in d.current_url or "upload" in d.current_url)
+        time.sleep(3)
 
     #upload test
     def test_3_upload(self):
@@ -83,6 +100,7 @@ class EndToEndTest(unittest.TestCase):
         submit_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         self.driver.execute_script("arguments[0].click();", submit_btn)
         WebDriverWait(self.driver, 10).until(EC.url_contains("select_model"))
+        time.sleep(3)
 
     #select model test
     def test_4_select_model(self):
@@ -100,7 +118,7 @@ class EndToEndTest(unittest.TestCase):
         go_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         self.driver.execute_script("arguments[0].click();", go_btn)
         WebDriverWait(self.driver, 10).until(EC.url_contains("results"))
-        time.sleep(5)
+        time.sleep(3)
 
 
 if __name__ == "__main__":
