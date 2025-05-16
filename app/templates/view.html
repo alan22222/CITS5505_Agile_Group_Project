@@ -16,14 +16,15 @@
         <div class="model-image-wrapper">
           <img src="{{ url_for('static', filename=run.graph_path.split('static/')[-1]) }}" 
                class="model-image" id="modelImage" alt="Model visualization">
+          <div class="image-controls">
+              <button class="image-control-btn" id="zoomIn" title="Zoom In">+</button>
+              <button class="image-control-btn" id="zoomOut" title="Zoom Out">-</button>
+              <button class="image-control-btn" id="fullscreen" title="Fullscreen">⛶</button>
+            </div>
         </div>
-        <div class="image-controls">
-          <button class="image-control-btn" id="zoomIn" title="Zoom In">+</button>
-          <button class="image-control-btn" id="zoomOut" title="Zoom Out">-</button>
-          <button class="image-control-btn" id="fullscreen" title="Fullscreen">⛶</button>
-        </div>
+        <!-- amended the div structure for the buttons stake to the image -->
         <div class="gpr-answer-container">
-          <h2>AI response</h2>
+          <h2>AI Suggestion</h2>
           <p>{{ gpr_answer }}</p>
         </div>
       {% else %}

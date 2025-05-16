@@ -1,8 +1,6 @@
-# 🚀 CITS5505_Agile_Group_Project - OneClickML
+# 🚀 OneClickML – CITS5505 Agile Group Project
 
-## 👥 Contribution
-
-Members of Group 39:
+## 👥 Group 39 Members
 
 | **UWA ID** | **Name**       | **GitHub Username(s)**       |
 |------------|----------------|------------------------------|
@@ -13,37 +11,36 @@ Members of Group 39:
 
 ---
 
-## 🎯 Purpose, Design, and Use of OneClickML
+## 🎯 About OneClickML
 
-OneClickML is a smart, streamlined data analysis platform that empowers users to discover the best machine learning model for their dataset — with just one click.
+**OneClickML** is a user-friendly machine learning platform that helps users quickly discover the best model for their dataset — with just one click.
 
-### 🔍 Key Features:
-- Simple registration and login system
+### 🔍 Key Features
+- Easy registration and login
 - CSV upload and validation
 - One-click ML model execution
-- Customizable processing speed
+- Configurable processing speed
 - Dashboard with visual insights
+- AI analysis for the results
 
-### 🧠 Supported Machine Learning Models:
+### 🧠 Supported ML Models
 - Linear Regression
 - Support Vector Machine (SVM)
 - K-Means Clustering
 
 ---
 
-## ⚙️ Instructions for Launching the OneClickML App
+## ⚙️ How to Run OneClickML
 
-OneClickML is developed using **Flask** and **SQLAlchemy**, and is written in **Python 3.10**.
+OneClickML is built with **Flask**, **SQLAlchemy**, and **Python 3.10**.
 
-### Folder Setup Steps:
-1. Unzip the folder
-2. Locate the unzipped file
-3. For Windows, use Powershell; For MacOS, use Terminal
+### 🗂️ Folder Setup
+1. Unzip the project folder.
+2. Open Terminal (macOS) or PowerShell (Windows).
 
+### 🛠️ Installation
 
-### 🛠️ Initial Setup
-
-1. Clone this repository:
+1. Clone the repository:
 ```bash
 git clone https://github.com/alan22222/CITS5505_Agile_Group_Project.git
 cd <project-folder>
@@ -71,7 +68,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Setup the local SQLite database (for the first time):
+4. Initialize the database (first-time setup only)::
 ```bash
 flask db upgrade
 ```
@@ -94,14 +91,14 @@ After launching, you should see:
 * Running on http://127.0.0.1:5000
 ```
 
-6. Use browser to open
+6. Visit in your browser:
 ```
 http://127.0.0.1:5000
 ```
 
 ---
 
-### ⚠️ Python Version Compatibility
+### ⚠️ Python Version Compatibility Tip
 
 If you encounter this error when installing dependencies:
 ```
@@ -119,11 +116,11 @@ If it's above `3.10`, consider downgrading to Python 3.10.
 
 | **Data File Name** | **Suitable Model**       | **Suggested Parameters** | **Has Header?** |
 |---------------------|--------------------------|---------------------------|------------------|
-| `data_10.csv`       | Linear Regression model | Fast, 1 (the index column)| Yes              |
-| `wdbc.csv`          | SVM model               | Fast, 1 (the index column)| Yes              |
-| `wdbc.csv`          | K-means model           | Fast, 1 (the index column)| Yes              |
+| `data_10.csv`       | Linear Regression model | Fast, Index1| Yes              |
+| `wdbc.csv`          | SVM model               | Fast, Index1| Yes              |
+| `wdbc.csv`          | K-means model           | Fast, Index1| Yes              |
 
-### 🔑 Accounts Prepared for Testing
+### 🔑 Test Accounts
 
 | **Account** | **Password** |
 |-------------|--------------|
@@ -141,9 +138,10 @@ You can run unit tests directly from the terminal.
 
 #### 🧭 Steps:
 
-1. Open a terminal.
+1. Open terminal.
 
-2. Navigate to the unit test folder:
+2. Navigate to the unit test folder. 
+For macOS:
 ```bash
 cd app/unit_test
 ```
@@ -158,7 +156,8 @@ cd .\unit_test
 ls
 ```
 
-4. Run a test file (e.g., `LinearRegression_test.py`):
+4. Run a test file (e.g., `LinearRegression_test.py`). 
+For macOS:
 ```bash
 python3 ./LinearRegression_test.py
 ```
@@ -167,9 +166,10 @@ For Windows:
 python .\LinearRegression_test.py
 ```
 
-5. Expected output when tests pass (Example):
+5. Expected output when the tests pass (Example):
 ```
-Ran 3 tests in 0.002s
+Ran 4 tests in 40.894s
+
 OK
 ```
 
@@ -183,45 +183,42 @@ OK
 
 This test simulates real user interactions using the Selenium framework.
 
-#### 🔧 Setup for macOS:
+#### 🔧 Setup:
 
-1. Install required Python packages:
+1. Ensure you have install the dependencies. The `selenium` is a must for running selenium tests.
 ```bash
-pip install selenium flask
+pip install -r requirements.txt
 ```
 
-2. Install ChromeDriver using Homebrew:
+2. Install ChromeDriver manager. 
+For macOS via Homebrew:
 ```bash
 brew install chromedriver
 ```
 For Windows:
 ```bash
-pip install webdriver-manager
+pip install chromedriver
 ```
 
-3. Add your project root to `PYTHONPATH` (for macOS):
+3. Ensure you are at the correct path, which is the root.
+For macOS, you can add your project root to `PYTHONPATH`:
 ```bash
 export PYTHONPATH=$PWD
 ```
 💡 This tells Python to treat the current directory as a top-level package.
 
-For Windows:
-```bash
-cd .\tests
-```
-
-4. Activate your virtual environment:
-```bash
-source myvenv/bin/activate
-```
-
 ---
 
 #### ▶️ Run the Selenium Test
 
-Execute the following command:
+For macOS, execute the following command:
 ```bash
-python3 tests/selenium_test.py
+python tests/test_e2e.py
+```
+
+For Windows:
+```bash
+python -m unittest tests/test_e2e.py
 ```
 
 Expected output example:
@@ -242,6 +239,6 @@ OK
 
 ## 📚 References
 
-OpenAI. (2024). *GPT-4o (ChatGPT, May 2024 version)* [Large language model]. https://chat.openai.com/
+- OpenAI. (2024). *GPT-4o (ChatGPT, May 2024 version)* . https://chat.openai.com/
 
-Alibaba Cloud. (2024). *Qwen: Large Language Model* [Language model family]. https://github.com/QwenLM/Qwen
+- Alibaba Cloud. (2024). *Qwen: Large Language Model* . https://github.com/QwenLM/Qwen
