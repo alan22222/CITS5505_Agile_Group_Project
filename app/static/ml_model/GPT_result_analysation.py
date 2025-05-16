@@ -12,15 +12,18 @@ Three entry-points (all return a string):
 Set OPENAI_API_KEY here only for demo purposes; replace with your own
 secure loading strategy in production.
 """
-import os
-from dotenv import load_dotenv
 import json
+import os
+
 import openai
-load_dotenv()  # load from .env
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="../.env")  # load from .env
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def validate_keychain():
     import os
+
     import openai
 
     # 1 – Make sure the variable is populated
