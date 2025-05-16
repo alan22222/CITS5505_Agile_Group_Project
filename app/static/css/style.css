@@ -189,7 +189,7 @@ form {
     padding: 15px;
     border-radius: 5px;
     font-weight: bold;
-    animation: flashMessage 5s ease-out;
+    animation: flashMessage 6s ease-out;
     /* make the noti longer */
     display: block; /* Ensure the alert is shown initially */
 }
@@ -332,9 +332,6 @@ form {
 
     .navbar-toggler {
         padding: 0.1rem 0.2rem;
-
-        /* padding: 0.25rem 0.4rem; Keep the toggler compact */
-        /* margin: auto; */
     }
 
     .container {
@@ -387,7 +384,10 @@ form {
     .date-display {
         margin-top: 15px;
     }
-    
+    .date-display p {
+        font-size: 0.8rem;
+    }
+
     .stats-container {
         grid-template-columns: 1fr;
     }
@@ -485,7 +485,11 @@ form {
     }
     
     .date-display {
-        margin-top: 1rem;
+        margin-top: 1rem;  
+    }
+
+    .date-display p {
+        font-size: 0.6rem;
     }
     
     .stats-container {

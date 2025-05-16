@@ -160,8 +160,8 @@ def upload():
         )
         db.session.add(uploaded_data)
         db.session.commit()
-        flash(f" {filename} upload success", "success")
-        flash(f"Suggested target index from AI: {suggested_target_col}", "info")
+        flash(f" The {filename} is successfully uploaded.", "success")
+        flash(f"The suggested target index from AI is {suggested_target_col}", "info")
         return redirect(url_for('main.select_model', data_id=uploaded_data.id ,suggested_col=suggested_target_col, column_names=list(df.columns), filename=filename ))
 
     return render_template(
