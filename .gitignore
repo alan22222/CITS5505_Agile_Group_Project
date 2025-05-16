@@ -1,5 +1,4 @@
 .env
-.env
 ../../__pycache__/__init__.cpython-311.pyc
 ../../__pycache__/__init__.cpython-312.pyc
 ../../__pycache__/forms.cpython-312.pyc
@@ -8,3 +7,4 @@
 ../../set_api_key.py
 __pycache__/
 ../../set_api_key.py
+instance/database.db

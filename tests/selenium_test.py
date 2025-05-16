@@ -1,8 +1,12 @@
 import os
+import sys
 import time
 import unittest
 import multiprocessing
  
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+sys.path.append(project_root)
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
