@@ -135,7 +135,7 @@ def SVMClassifier(clean_data, label_column, type):
 
 if __name__ == "__main__":
     from flask import Flask
-    file_path = "./../../../tests/classifier_data.csv"
+    file_path = "../../../tests/classifier_data.csv"
     test_df = pd.read_csv(file_path)
     app = Flask(__name__)
     with app.app_context():
