@@ -1,102 +1,8 @@
 .
 ├── __pycache__
 │   ├── config.cpython-312.pyc
+│   ├── run.cpython-312.pyc
 │   └── testing.cpython-312.pyc
-├── .DS_Store
-├── .env
-├── .git
-│   ├── .DS_Store
-│   ├── AUTO_MERGE
-│   ├── COMMIT_EDITMSG
-│   ├── config
-│   ├── description
-│   ├── FETCH_HEAD
-│   ├── HEAD
-│   ├── hooks
-│   │   ├── applypatch-msg.sample
-│   │   ├── commit-msg.sample
-│   │   ├── fsmonitor-watchman.sample
-│   │   ├── post-update.sample
-│   │   ├── pre-applypatch.sample
-│   │   ├── pre-commit.sample
-│   │   ├── pre-merge-commit.sample
-│   │   ├── pre-push.sample
-│   │   ├── pre-rebase.sample
-│   │   ├── pre-receive.sample
-│   │   ├── prepare-commit-msg.sample
-│   │   ├── push-to-checkout.sample
-│   │   └── update.sample
-│   ├── index
-│   ├── info
-│   │   └── exclude
-│   ├── logs
-│   │   ├── HEAD
-│   │   └── refs
-│   │       ├── heads
-│   │       │   ├── BothGPTassistant
-│   │       │   ├── CleanBranchWithoutKey
-│   │       │   ├── GPTassistantWithoutKey
-│   │       │   ├── login_test
-│   │       │   ├── main
-│   │       │   ├── selenium_test
-│   │       │   └── wizzardG7777777-GPTassistant-added
-│   │       └── remotes
-│   │           └── origin
-│   │               ├── CleanBranchWithoutKey
-│   │               ├── feature
-│   │               │   ├── authenticationuploading
-│   │               │   ├── BothGPTassistant
-│   │               │   │   └── WizzardG7777777
-│   │               │   ├── overallstyling
-│   │               │   ├── styling_sTesting
-│   │               │   └── testing
-│   │               ├── feature-dashboard
-│   │               ├── gpt-feature
-│   │               ├── main
-│   │               ├── origin
-│   │               │   └── feature
-│   │               │       └── BothGPTassistant
-│   │               │           └── WizzardG7777777
-│   │               ├── Pixy-greenhand-patch-1
-│   │               ├── test
-│   │               ├── WebApp_AnalysationUploaded
-│   │               ├── wizzardG7777777-GPTassistant-added
-│   │               └── YanchenIsTesting
-│   ├── ORIG_HEAD
-│   ├── packed-refs
-│   └── refs
-│       ├── heads
-│       │   ├── BothGPTassistant
-│       │   ├── CleanBranchWithoutKey
-│       │   ├── GPTassistantWithoutKey
-│       │   ├── login_test
-│       │   ├── main
-│       │   ├── selenium_test
-│       │   └── wizzardG7777777-GPTassistant-added
-│       ├── remotes
-│       │   └── origin
-│       │       ├── CleanBranchWithoutKey
-│       │       ├── feature
-│       │       │   ├── authenticationuploading
-│       │       │   ├── BothGPTassistant
-│       │       │   │   └── WizzardG7777777
-│       │       │   ├── overallstyling
-│       │       │   ├── styling_sTesting
-│       │       │   └── testing
-│       │       ├── feature-dashboard
-│       │       ├── gpt-feature
-│       │       ├── main
-│       │       ├── origin
-│       │       │   └── feature
-│       │       │       └── BothGPTassistant
-│       │       │           └── WizzardG7777777
-│       │       ├── Pixy-greenhand-patch-1
-│       │       ├── test
-│       │       ├── WebApp_AnalysationUploaded
-│       │       ├── wizzardG7777777-GPTassistant-added
-│       │       └── YanchenIsTesting
-│       └── tags
-├── .gitignore
 ├── app
 │   ├── __init__.py
 │   ├── __pycache__
@@ -106,16 +12,22 @@
 │   │   ├── models.cpython-312.pyc
 │   │   ├── routes.cpython-312.pyc
 │   │   └── routes.cpython-313.pyc
-│   ├── .DS_Store
 │   ├── forms.py
 │   ├── models.py
 │   ├── plotting
 │   │   └── 14a16b1e-2a0e-408d-bb0a-b43de2dea236.png
 │   ├── routes.py
 │   ├── selenium_test
+│   │   ├── __pycache__
+│   │   │   ├── file_uploading_analysation_test.cpython-312.pyc
+│   │   │   ├── login_logout_flow_test.cpython-312.pyc
+│   │   │   └── sharing_test.cpython-312.pyc
+│   │   ├── file_uploading_analysation_test.py
+│   │   ├── login_logout_flow_test.py
+│   │   ├── register_test_chrome.py
+│   │   ├── sharing_test.py
 │   │   └── test1.py
 │   ├── static
-│   │   ├── .DS_Store
 │   │   ├── css
 │   │   │   ├── dashboard.css
 │   │   │   ├── login-reg.css
@@ -151,10 +63,13 @@
 │   │   │   │       └── fe23bd68-7e4d-44f6-9e6b-da76ab7ddf92.png
 │   │   │   └── SVM_classifier.py
 │   │   └── plotting
+│   │       ├── 047b3132-296e-4ada-95a2-7fe136a0f8cf.png
 │   │       ├── 294778a0-4465-40ef-805d-50009d434de1.png
+│   │       ├── 431e7e01-dc26-4522-8b39-961b05b93eea.png
 │   │       ├── 4a55dccf-3b30-40d9-a712-1c1ffff6fe2b.png
 │   │       ├── 618f58e6-a4a6-4aa3-9fad-b9058d6d35db.png
 │   │       ├── 84c2c059-a50f-4919-94d0-0257dabfeb77.png
+│   │       ├── a9f56b93-b36b-4cb9-87f6-3553e60e6135.png
 │   │       └── kmeans_radar_12-38-33_07-05-2025.png
 │   ├── templates
 │   │   ├── dashboard.html
@@ -169,11 +84,6 @@
 │   │   ├── shared_results.html
 │   │   ├── upload.html
 │   │   └── view.html
-│   ├── test_json
-│   │   ├── Kmeans1.json
-│   │   ├── Linear1.json
-│   │   ├── Linear2.json
-│   │   └── SVM1.json
 │   └── unit_test
 │       ├── DataWashing_test.py
 │       ├── K_means_test.py
@@ -193,17 +103,19 @@
 ├── data
 │   └── uploads
 │       ├── 1
-│       │   ├── data.csv
 │       │   ├── LGA_count_of_dwellings.csv
 │       │   └── top_100_rules.csv
-│       └── 2
-│           └── cleaned_dataset.csv
+│       ├── 2
+│       │   └── cleaned_dataset.csv
+│       ├── 3
+│       │   └── regression_data.csv
+│       └── 4
+│           └── regression_data.csv
 ├── instance
 │   └── database.db
 ├── migrations
 │   ├── __pycache__
 │   │   └── env.cpython-39.pyc
-│   ├── .DS_Store
 │   ├── alembic.ini
 │   ├── env.py
 │   ├── README
@@ -226,4 +138,4 @@
     ├── regression_data.csv
     └── selenium_test.py
 
-293 directories, 837 files
+32 directories, 107 files
