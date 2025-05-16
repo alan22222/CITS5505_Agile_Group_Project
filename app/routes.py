@@ -246,7 +246,7 @@ def select_model():
             )
             db.session.add(model_run)
             db.session.commit()
-            flash("Model execution success: " + str(result))
+            flash("Model execution success: " + str(result), "success")
             return redirect(url_for('main.results'))
 
         else:
