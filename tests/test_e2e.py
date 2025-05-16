@@ -24,7 +24,7 @@ def run_flask():
 class EndToEndTest(unittest.TestCase):
     @classmethod
 
-    #randomly generate csv files
+    #randomly generate testuser and csv files
     def setUpClass(cls):
         cls.username = "testuser_" + ''.join(random.choices(string.ascii_lowercase, k=5))
         cls.password = "TestPass123"
