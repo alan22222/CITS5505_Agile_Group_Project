@@ -1,9 +1,17 @@
 import os
+
 import openai
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="../.env") # load from .env
+
 def say_hello2model(model_name="gpt-4.1-mini-2025-04-14"):
-    client = openai.OpenAI(
-    api_key="SECRET-KEY"
-    )
+    api_key= os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        print("API key not found. Please set OPENAI_API_KEY in .env.")
+        return None
+
+    client = openai.OpenAI(api_key=api_key)
 
     completion = client.chat.completions.create(
     model=model_name,
@@ -18,7 +26,13 @@ def say_hello2model(model_name="gpt-4.1-mini-2025-04-14"):
 def GPT_column_suggestion(input:str):
 
     # Set your API key, remember to replace the SECRET-KEY into our own before demostration
-    openai.api_key = "SECRET_KEY"
+    api_key =  os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        print("API key not found. Please set OPENAI_API_KEY in .env.")
+        return None
+    
+    openai.api_key = api_key
+
 
     # Example dataset slice (replace with your actual JSON)
     dataset_json = input
