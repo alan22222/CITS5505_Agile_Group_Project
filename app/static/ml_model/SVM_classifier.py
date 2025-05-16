@@ -1,3 +1,4 @@
+#svm classifier.py
 import os
 import uuid
 
@@ -132,3 +133,14 @@ def SVMClassifier(clean_data, label_column, type):
         error_message = f"Error during SVM Classifier training: {str(e)}"
         result = error_message
         return result, False
+
+if __name__ == "__main__":
+    from flask import Flask
+    file_path = "../../../tests/classifier_data.csv"
+    test_df = pd.read_csv(file_path)
+    app = Flask(__name__)
+    with app.app_context():
+        for model_type in ["Fast", "Balance", "High Precision"]:
+            result, success = SVMClassifier(test_df, 1, model_type)
+            print(result)
+            print(success)
