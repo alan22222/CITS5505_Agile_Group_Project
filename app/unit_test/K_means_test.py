@@ -4,11 +4,8 @@ import numpy as np
 import os
 import sys
 
-# 获取当前脚本所在的目录（unit_test目录）
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# 获取 app 目录的上一级目录（即项目根目录）
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-# 将项目根目录添加到 Python 模块搜索路径中
 sys.path.append(project_root)
 
 from app.static.ml_model.K_means import kmeans_function, plot_radar_chart
