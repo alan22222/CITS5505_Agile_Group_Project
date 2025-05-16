@@ -1,0 +1,42 @@
+/* Hero Section */
+.hero {
+  position: relative;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/hero.png') no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+  color: #fff;
+}
+.hero .content {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.btn-cta {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+.btn-cta:hover { transform: scale(1.05); }
+/* Feature Cards as Links */
+.feature-link {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: .5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+.feature-link:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+/* Navbar Transparent */
+.navbar-transparent {
+  background: transparent;
+  position: absolute;
+  top: 0; width: 100%;
+  z-index: 10;
+}
