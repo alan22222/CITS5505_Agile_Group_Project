@@ -62,6 +62,7 @@ def create_app(config_class=None):
     login_manager.login_view = 'main.login'
 
     from app.models import User  # Avoid circular import
+    from app.models import User  # Avoid circular import
     from app.routes import main
     app.register_blueprint(main)
 
@@ -70,5 +71,7 @@ def create_app(config_class=None):
         return User.query.get(int(user_id))
 
     return app
+
+    
 
     

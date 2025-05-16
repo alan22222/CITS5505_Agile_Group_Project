@@ -135,6 +135,13 @@ input[type="file"]::file-selector-button:hover {
 
 .alert-dismiss {
     display: none;
+    animation: flashMessage 5s ease-out;
+    /* make the noti longer */
+    display: block; /* Ensure the alert is shown initially */
+}
+
+.alert-dismiss {
+    display: none;
 }
 
 /* custom styles for different alert types */
@@ -241,43 +248,7 @@ input[type="file"]::file-selector-button:hover {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btn-light {
-    background-color: white;
-    color: var(--dark-color);
-    border: 1.5px solid rgba(30, 30, 47, 1);
-    font-weight: bold;
-    transition: var(--transition);
-}
-
-.btn-light:hover {
-    background-color: rgba(30, 30, 47, 1);
-    color: rgba(255, 213, 128);
-    border-color: rgba(30, 30, 47, 1);
-}
-
-.btn-danger {
-    background-color: var(--dark-color);
-}
-
-/* for Flash message keyframes */
-@keyframes flashMessage {
-    0% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    25% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    75% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-}
+/* Responsive Adjustments */
 
 
 @media (max-width: 1000px) {

@@ -326,8 +326,19 @@ def view_result(run_id):
             metrics = json.loads(run.result_json)
         except:
             pass
+     # Use model-specific GPT assistant to interpret the results
+    if run.model_type=='linear_regression':
+        gpr_answer=linear_regression_assistant(run.result_json)
+        print(gpr_answer)
+    elif run.model_type=='KMeans':
+                gpr_answer=kmeans_assistant(run.result_json)
+    elif run.model_type=='SVM':
+        gpr_answer=svm_classifier_assistant(run.result_json)
+    else:
+        flash("model name not found")
+        gpr_answer = "N/A"
 
-    return render_template('view.html', run=run, metrics=metrics)
+    return render_template('view.html', run=run, metrics=metrics,gpr_answer=gpr_answer)
 
 @main.route('/shared_with_me')
 @login_required

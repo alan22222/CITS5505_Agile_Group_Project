@@ -3,61 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to MyApp</title>
+  <title>Welcome to OneClickML</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <style>
-    /* Hero Section */
-    .hero {
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/hero.png') no-repeat center center;
-      background-size: cover;
-      height: 100vh;
-      color: #fff;
-    }
-    .hero .content {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-    .btn-cta {
-      padding: 0.75rem 1.5rem;
-      font-size: 1.25rem;
-      transition: transform 0.2s;
-    }
-    .btn-cta:hover { transform: scale(1.05); }
-    /* Feature Cards as Links */
-    .feature-link {
-      display: block;
-      padding: 1.5rem;
-      border: 1px solid #dee2e6;
-      border-radius: .5rem;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s, box-shadow 0.2s;
-      background-color: #fff;
-    }
-    .feature-link:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    }
-    /* Navbar Transparent */
-    .navbar-transparent {
-      background: transparent;
-      position: absolute;
-      top: 0; width: 100%;
-      z-index: 10;
-    }
-  </style>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
 </head>
 <body>
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light navbar-transparent">
     <div class="container">
-      <a class="navbar-brand text-white" href="#">MyApp</a>
+      <a class="navbar-brand text-white" href="#"><i class="bi bi-house-heart"></i> OneClickML</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -104,7 +62,7 @@
           <a href="{{ url_for('main.login') }}" class="feature-link text-center">
             <i class="bi bi-share display-4 mb-3 text-info"></i>
             <h5>Share Results</h5>
-            <p>Export or share your results with your team.</p>
+            <p>Export or share your results with the others.</p>
             <button class="btn btn-outline-info mt-2">Login to Share</button>
           </a>
         </div>
@@ -115,7 +73,7 @@
   <!-- Footer -->
   <footer class="bg-dark text-white text-center py-4">
     <div class="container">
-      <p class="mb-0">© 2025 MyApp. All rights reserved.</p>
+      <p class="mb-0">© 2025 OneClickML. All rights reserved.</p>
     </div>
   </footer>
 
