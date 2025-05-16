@@ -21,42 +21,42 @@ from app import create_app, db  # noqa: E402
 class TestAuthWorkflow(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # 创建内存数据库的Flask应用
+        # Create a Flask application with an in-memory database
         from config import TestConfig
         cls.app = create_app(config_class=TestConfig)
         cls.app_context = cls.app.app_context()
         cls.app_context.push()
         db.create_all()
         
-        # 在单独的线程中启动Flask应用
+        # Start Flask app in a separate thread
         def run_flask_app():
             cls.app.run(host='127.0.0.1', port=5001, use_reloader=False)
             
         cls.flask_thread = threading.Thread(target=run_flask_app)
-        cls.flask_thread.daemon = True  # 设置为守护线程，这样主线程结束时它会自动终止
+        cls.flask_thread.daemon = True  # Set as a daemon thread so it automatically terminates when the main thread ends
         cls.flask_thread.start()
-        print("Flask应用已在后台启动")
-        sleep(1)  # 给Flask应用一点时间来启动
+        print("Flask app started in the background")
+        sleep(1)  # Give the Flask app some time to start
 
-        # 配置Selenium
+        # Configure Selenium
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")  # 无头模式
+        chrome_options.add_argument("--headless")  # Headless mode
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"  # 明确指定Chrome路径
+        chrome_options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"  # Explicitly specify Chrome path
         
-        # 使用Service对象配置驱动
+        # Use Service object to configure the driver
         service = Service(executable_path='/opt/homebrew/bin/chromedriver')
         cls.driver = webdriver.Chrome(
             service=service,
             options=chrome_options
         )
-        cls.driver.implicitly_wait(10)  # 增加隐式等待时间
+        cls.driver.implicitly_wait(10)  # Increase implicit wait time
 
     @classmethod
     def tearDownClass(cls):
         cls.driver.quit()
-        # 关闭Flask应用
+        # Shutdown Flask app
         import requests
         try:
             requests.get('http://127.0.0.1:5001/shutdown', timeout=0.1)
@@ -72,25 +72,25 @@ class TestAuthWorkflow(unittest.TestCase):
         test_password = "BotPassword"
         test_email = "TestBot1@bot.com"
 
-        # 步骤1：访问首页
+        # Step 1: Visit the homepage
         driver.get("http://127.0.0.1:5001")
         
-        # 步骤2-5：执行注册
+        # Steps 2-5: Perform registration
         self._register_user(test_username, test_password, test_email)
         
-        # 步骤6：验证注册成功
+        # Step 6: Verify registration success
         self._verify_registration_success()
 
-        # 步骤7-8：使用新账号登录
+        # Steps 7-8: Log in with the new account
         self._login_user(test_username, test_password)
         
-        # 步骤9：验证登录成功
+        # Step 9: Verify login success
         self._verify_login_success()
 
-        # 步骤10：测试仪表盘所有链接
+        # Step 10: Test all links on the dashboard
         self._test_dashboard_links()
 
-        # 步骤11-12：执行登出并验证
+        # Steps 11-12: Perform logout and verify
         self._logout_and_verify()
 
     def _register_user(self, username, password, email):
@@ -100,9 +100,9 @@ class TestAuthWorkflow(unittest.TestCase):
             )
             register_btn.click()
         except Exception as e:
-            self.fail(f"注册按钮点击失败: {str(e)}")
+            self.fail(f"Failed to click the register button: {str(e)}")
 
-        # 填写注册表单
+        # Fill out the registration form
         username_field = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.NAME, "username"))
         )
@@ -113,7 +113,7 @@ class TestAuthWorkflow(unittest.TestCase):
         password_field.send_keys(password)
         email_field.send_keys(email)
 
-        # 提交表单
+        # Submit the form
         submit_btn = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Register')]"))
         )
@@ -128,7 +128,7 @@ class TestAuthWorkflow(unittest.TestCase):
             ).text
             self.assertIn("Registration successful", flash_msg)
         except Exception as e:
-            self.fail(f"注册验证失败: {str(e)}")
+            self.fail(f"Registration verification failed: {str(e)}")
 
     def _login_user(self, username, password):
         try:
@@ -145,7 +145,7 @@ class TestAuthWorkflow(unittest.TestCase):
             )
             submit_btn.click()
         except Exception as e:
-            self.fail(f"登录过程失败: {str(e)}")
+            self.fail(f"Login process failed: {str(e)}")
 
     def _verify_login_success(self):
         try:
@@ -156,21 +156,21 @@ class TestAuthWorkflow(unittest.TestCase):
             ).text
             self.assertIn("IamTestBot1", welcome_text)
         except Exception as e:
-            self.fail(f"登录验证失败: {str(e)}")
+            self.fail(f"Login verification failed: {str(e)}")
 
     def _test_dashboard_links(self):
         try:
             test_links = [
-                # 根据实际页面结构调整验证元素定位方式
-                ("Upload Data", "/upload", (".container form", "上传表单")),
-                ("Analyze", "/results", (".container .row", "分析结果区")),
-                ("Shares", "/shared_with_me", (".container", "共享文件页面"))
+                # Adjust validation element locators based on actual page structure
+                ("Upload Data", "/upload", (".container form", "Upload Form")),
+                ("Analyze", "/results", (".container .row", "Analysis Results Area")),
+                ("Shares", "/shared_with_me", (".container", "Shared Files Page"))
             ]
 
             for link_text, expected_path, (element_locator, element_desc) in test_links:
-                print(f"正在测试链接: {link_text}")
+                print(f"Testing link: {link_text}")
                 try:
-                    # 使用更稳定的定位方式
+                    # Use a more stable locator strategy
                     link = WebDriverWait(self.driver, 15).until(
                         EC.element_to_be_clickable(
                             (By.XPATH, 
@@ -178,10 +178,10 @@ class TestAuthWorkflow(unittest.TestCase):
                         )
                     )
                     
-                    # 添加调试信息
-                    print(f"元素定位成功，位置：{link.location}")
+                    # Add debug information
+                    print(f"Element located successfully, position: {link.location}")
                     
-                    # 使用带滚动和悬停的点击方式
+                    # Use click with scroll and hover
                     self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
                     ActionChains(self.driver)\
                         .move_to_element(link)\
@@ -189,40 +189,40 @@ class TestAuthWorkflow(unittest.TestCase):
                         .click()\
                         .perform()
                         
-                    # 分步等待策略
-                    # 1. 先等待URL变化
+                    # Step-by-step waiting strategy
+                    # 1. Wait for URL change first
                     WebDriverWait(self.driver, 20).until(
                         EC.url_contains(expected_path)
                     )
-                    print(f"成功跳转到：{self.driver.current_url}")
+                    print(f"Successfully navigated to: {self.driver.current_url}")
                     
-                    # 2. 再等待目标元素可见
+                    # 2. Then wait for the target element to be visible
                     WebDriverWait(self.driver, 20).until(
                         EC.visibility_of_element_located((By.CSS_SELECTOR, element_locator))
                     )
-                    print(f"目标元素 {element_desc} 加载成功")
+                    print(f"Target element {element_desc} loaded successfully")
                     
-                    # 返回操作加强验证
+                    # Enhanced back operation validation
                     self.driver.back()
-                    # 先等待URL变化
+                    # Wait for URL change first
                     WebDriverWait(self.driver, 20).until(
                         EC.url_matches(r".*/dashboard/?.*")
                     )
-                    # 再等待元素可见
+                    # Then wait for the element to be visible
                     WebDriverWait(self.driver, 20).until(
                         EC.visibility_of_element_located((By.CSS_SELECTOR, ".stats-container"))
                     )
-                    print("成功返回仪表盘")
-                    sleep(1)  # 保证DOM稳定
+                    print("Successfully returned to dashboard")
+                    sleep(1)  # Ensure DOM stability
                     
                 except Exception as e:
                     current_html = self.driver.page_source[:1000]
-                    print(f"当前页面HTML片段：\n{current_html}")
+                    print(f"Current page HTML snippet:\n{current_html}")
                     self.driver.save_screenshot(f"{link_text.replace(' ', '_')}_error.png")
-                    self.fail(f"链接 {link_text} 测试失败: {str(e)}\n当前URL: {self.driver.current_url}")
+                    self.fail(f"Link {link_text} test failed: {str(e)}\nCurrent URL: {self.driver.current_url}")
 
         except Exception as e:
-            self.fail(f"仪表盘链接测试失败: {str(e)}")
+            self.fail(f"Dashboard link test failed: {str(e)}")
 
     def _logout_and_verify(self):
         try:
@@ -238,7 +238,7 @@ class TestAuthWorkflow(unittest.TestCase):
             )
             self.assertTrue(login_btn.is_displayed())
         except Exception as e:
-            self.fail(f"登出过程失败: {str(e)}")
+            self.fail(f"Logout process failed: {str(e)}")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
